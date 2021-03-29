@@ -2,10 +2,11 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import gui.panels.*;
 
 public class MainFrame extends JFrame {
 
-    public static GridPanel mainPanel;
+    private static final long serialVersionUID = 1L;
     
     private GridPanel currentPanel;
 
@@ -22,10 +23,6 @@ public class MainFrame extends JFrame {
         this.setTitle("Notenberechnung Lehramt Gymnasium");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBackground(Color.CYAN);
-
-        currentPanel = new GridPanel(rows, cols);
-        mainPanel = currentPanel;
-        this.add(currentPanel);
     }
 
     public void place(int x, int y, JComponent c) {
@@ -36,16 +33,15 @@ public class MainFrame extends JFrame {
         currentPanel.removeComponent(x, y, c);
     }
 
-    public void showNewPanel(GridPanel next) {
-        currentPanel.setVisible(false);
-        this.remove(currentPanel);
-
-        System.out.println("Check1:" + currentPanel);
+    public void showPanel(GridPanel next) {
+        if(currentPanel != null){
+            currentPanel.setVisible(false);
+            this.remove(currentPanel);
+        }
         
-        this.add(next);
         currentPanel = next;
-        System.out.println("Check=?");
         next.setVisible(true);
+        this.add(next);
     }
 
 }

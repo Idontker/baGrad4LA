@@ -1,11 +1,11 @@
-package gui;
+package gui.panels;
 
 import java.awt.*;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-public class GridPanel extends JPanel {
+public abstract class GridPanel extends JPanel {
 
     protected static final long serialVersionUID = 1L;
     protected JPanel[][] panels;
@@ -31,4 +31,5 @@ public class GridPanel extends JPanel {
     }
 
 
+    public abstract void initButtons(); 
 }

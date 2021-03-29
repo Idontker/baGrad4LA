@@ -1,113 +1,95 @@
 package gui;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
+import javax.swing.JComboBox;
 
-import gui.buttons.ListenerGoToPage;
-import gui.buttons.MyButton;
+import gui.panels.FachPanel;
+import gui.panels.MainPanel;
+import main.Calculator;
+import util.Fach;
 
 public class GUI {
 
     public static MainFrame frame;
-    private JLabel label_fach1, label_fach2, label_fach3, label_ews;
-    private JLabel label_note, label_etcs;
-    private JLabel label_note1, label_note2, label_note3, label_etcs1, label_etcs2, label_etcs3;
-    private JButton[] add_modul;
-    private JButton[] change_modul;
+    public static MainPanel mainPanel;
 
-    private String[] FACHERLISTE = new String[] { "None", "Mathematik", "Informatik", "Wirtschaft", "Englisch" };
+    // public static String[] FACHERLISTE; // = new String[] { "None", "Mathematik",
+    // "Informatik", "Wirtschaft", "Englisch" };
+    public static HashMap<String, FachPanel> FACH_PANEL_MAP;
+    private static ArrayList<Fach> faecherliste;
 
-    public GUI() {
+    private static String DEFAULT_AUSWAHL = "bitte auswählen";
+
+    public GUI(ArrayList<Fach> faecherliste) {
+        GUI.faecherliste = faecherliste;
+
         frame = new MainFrame(1080, 480, 10, 6);
 
-        initLabels();
-        initButtons();
+        MainPanel p = new MainPanel();
+        GUI.mainPanel = p;
 
-        frame.place(0, 1, label_fach1);
-        frame.place(0, 2, label_fach2);
-        frame.place(0, 3, label_fach3);
-
-
-        frame.place(1, 1, createDropDow(FACHERLISTE));
-        frame.place(1, 2, createDropDow(FACHERLISTE));
-        frame.place(1, 3, label_ews);
-
-        frame.place(2, 0, label_etcs);
-        frame.place(2, 1, label_etcs1);
-        frame.place(2, 2, label_etcs2);
-        frame.place(2, 3, label_etcs3);
-
-        frame.place(3, 0, label_note);
-        frame.place(3, 1, label_note1);
-        frame.place(3, 2, label_note2);
-        frame.place(3, 3, label_note3);
-
-        for(int i = 0; i < 3; i++){
-            //frame.place(4, i+1, add_modul[i]);
-            frame.place(4, i+1, change_modul[i]);
+        // build Fachpanels
+        FACH_PANEL_MAP = new HashMap<String, FachPanel>();
+        for (Fach fach : faecherliste) {
+            FachPanel f = new FachPanel(fach);
+            f.initButtons();
+            FACH_PANEL_MAP.put(fach.fachname, f);
         }
+
+        p.initButtons();
+        frame.showPanel(p);
 
         frame.setVisible(true);
     }
 
-    private void initLabels() {
-        label_fach1 = new JLabel("Fach 1: ");
-        label_fach1.setVisible(true);
-
-        label_fach2 = new JLabel("Fach 2: ");
-        label_fach2.setVisible(true);
-
-        label_fach3 = new JLabel("Fach 3: ");
-        label_fach3.setVisible(true);
-
-        label_ews = new JLabel("EWS");
-        label_ews.setVisible(true);
-        // ===================================
-
-        label_note = new JLabel("Teilnote");
-        label_note.setVisible(true);
-
-        label_note1 = new JLabel("Note 1");
-        label_note1.setVisible(true);
-        label_note2 = new JLabel("Note 2");
-        label_note2.setVisible(true);
-        label_note3 = new JLabel("Note 3");
-        label_note3.setVisible(true);
-
-        // ===================================
-
-        label_etcs = new JLabel("ETCS bislang");
-        label_etcs.setVisible(true);
-
-        label_etcs1 = new JLabel("ECTS 1");
-        label_etcs1.setVisible(true);
-        label_etcs2 = new JLabel("ECTS 2");
-        label_etcs2.setVisible(true);
-        label_etcs3 = new JLabel("ECTS 3");
-        label_etcs3.setVisible(true);
-
-    }
-
-    private void initButtons(){
-        add_modul = new JButton[3]; 
-        change_modul = new JButton[3];
-        
-        for(int i = 0; i < 3; i++){
-            //add_modul[i] = new MyButton("Modul hinzufügen", i);
-
-            change_modul[i] = new MyButton("Fachübersicht");
-        }
-        GridPanel p = new FachPanel(new String[]{"AuD", "TheoInf", "SP"}, "Informatik");
-        change_modul[0].addActionListener(new ListenerGoToPage(p, frame));
-    }
-
     public static JComboBox<String> createDropDow(String items[]) {
-        JComboBox<String> cmb = new JComboBox<String>(items);
+        String[] tmp = new String[items.length + 1];
+        tmp[0] = DEFAULT_AUSWAHL;
+        for (int i = 0; i < items.length; i++) {
+            tmp[i + 1] = items[i];
+        }
+
+        JComboBox<String> cmb = new JComboBox<String>(tmp);
         cmb.setSelectedItem(0);
         cmb.setVisible(true);
         return cmb;
+    }
+
+    public static void update() {
+        // FachPanel f1 = GUI.FACH_PANEL_MAP.get(mainPanel.getComboBoxString(0));
+        // FachPanel f2 = GUI.FACH_PANEL_MAP.get(mainPanel.getComboBoxString(1));
+        String f1 = mainPanel.getComboBoxString(0);
+        String f2 = mainPanel.getComboBoxString(1);
+
+        double[] r1 = updateFach(f1);
+        double[] r2 = updateFach(f2);
+        double[] r3 = updateFach("EWS");
+        mainPanel.updateNote(r1[0], 0);
+        mainPanel.updateNote(r2[0], 1);
+        mainPanel.updateNote(r3[0], 2);
+
+        mainPanel.updateETCS(r1[1], 0);
+        mainPanel.updateETCS(r2[1], 1);
+        mainPanel.updateETCS(r3[1], 2);
+    }
+
+    private static double[] updateFach(String fach) {
+        if (fach.equals(DEFAULT_AUSWAHL)) {
+            return new double[] { 0, 0 };
+        }
+
+        double tmp[] = Calculator.calcFach(getFachByString(fach));
+        return new double[] { tmp[1], tmp[2] };
+    }
+
+    private static Fach getFachByString(String fach) {
+        for (Fach f : faecherliste) {
+            if (f.fachname.equals(fach)) {
+                return f;
+            }
+        }
+        return null;
     }
 }
