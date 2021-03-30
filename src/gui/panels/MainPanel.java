@@ -1,7 +1,6 @@
 package gui.panels;
 
 import java.util.ArrayList;
-import java.util.Set;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +27,7 @@ public class MainPanel extends GridPanel {
     private JLabel[] label_goalETCS;
 
     private JLabel label_total, label_total_note, label_total_etcs;
+    private JLabel label_pred, label_pred_note;
 
     private JButton[] change_modul;
 
@@ -83,11 +83,18 @@ public class MainPanel extends GridPanel {
         label_goalETCS[0] = new JLabel("ETCS benötigt");
         label_goalETCS[1] = new JLabel("70 ETCS");
         label_goalETCS[2] = new JLabel("70 ETCS");
-        label_goalETCS[3] = new JLabel("40 ETCS");
+        label_goalETCS[3] = new JLabel("41 ETCS");
 
         for (int i = 0; i < label_goalETCS.length; i++) {
             label_goalETCS[1].setVisible(true);
         }
+
+        // ===================================
+
+        label_warning1 = new JLabel("zu viele ETCS");
+        label_warning2 = new JLabel("zu viele ETCS");
+        label_warning1.setForeground(Color.red);
+        label_warning2.setForeground(Color.red);
 
         // ===================================
 
@@ -100,10 +107,12 @@ public class MainPanel extends GridPanel {
 
         // ===================================
 
-        label_warning1 = new JLabel("zu viele ETCS");
-        label_warning2 = new JLabel("zu viele ETCS");
-        label_warning1.setForeground(Color.red);
-        label_warning2.setForeground(Color.red);
+        label_pred = new JLabel("Hochrechnung:");
+        label_pred_note = new JLabel();
+        label_pred.setVisible(true);
+        label_pred_note.setVisible(true);
+
+        // ===================================
     }
 
     private void placeLabels() {
@@ -131,6 +140,9 @@ public class MainPanel extends GridPanel {
         place(2, 4, label_total_note);
         place(3, 4, label_total_etcs);
 
+        place(0, 5, label_pred);
+        place(2, 5, label_pred_note);
+
         place(5, 1, label_warning1);
         place(5, 2, label_warning2);
     }
@@ -143,7 +155,6 @@ public class MainPanel extends GridPanel {
                 faechernamen.add(f.fachname);
             }
         }
-        System.out.println(faechernamen);
 
         comboBox = new JComboBox[2];
 
@@ -178,7 +189,7 @@ public class MainPanel extends GridPanel {
 
         change_modul[2] = new MyButton("Fachübersicht");
         change_modul[2].addActionListener(new ListenerGoToPage("EWS"));
-        place(5, 3, change_modul[2]);
+        place(6, 3, change_modul[2]);
     }
 
     public String getComboBoxString(int i) {
@@ -207,10 +218,7 @@ public class MainPanel extends GridPanel {
             label = null;
         }
 
-        val = Math.round(val * 100) / 100.0;
-        String s = String.format("%.2f", val);
-
-        label.setText(s);
+        label.setText(formatGrad(val));
     }
 
     public void updateETCS(double val, int fachnummer) {
@@ -233,10 +241,7 @@ public class MainPanel extends GridPanel {
             warning = null;
         }
 
-        val = Math.round(val * 10) / 10.0;
-        String s = String.format("%.1f", val);
-
-        label.setText(s);
+        label.setText(formatETCS(val));
 
         if (warning != null) {
             if (val > 70.001) {
@@ -248,16 +253,39 @@ public class MainPanel extends GridPanel {
     }
 
     public void updateTotal(double note, double etcs) {
-
-        note = Math.round(note * 100) / 100.0;
-        String s = String.format("%.2f", note);
-
+        String s = formatGrad(note);
         label_total_note.setText(s);
 
-        etcs = Math.round(etcs * 10) / 10.0;
-        s = String.format("%.1f", etcs);
+        s = formatETCS(etcs);
 
         label_total_etcs.setText(s + " ETCS");
+    }
 
+    public void updatePred(double pred) {
+        String s = formatGrad(pred);
+        label_pred_note.setText(s);
+    }
+
+    // ============================================
+    // ============================================
+    // ============= Format Stuff =================
+    // ============================================
+    // ============================================
+
+    private String formatGrad(double d) {
+        if (d == 0.0 || Double.isNaN(d)) {
+            return "???";
+        }
+        return roundedDoubleAsString(2, d);
+    }
+
+    private String formatETCS(double d) {
+        return roundedDoubleAsString(1, d);
+    }
+
+    private String roundedDoubleAsString(int digits, double d) {
+        double expo = Math.pow(10, digits);
+        d = Math.round(d * expo) / expo;
+        return String.format("%." + digits + "f", d);
     }
 }

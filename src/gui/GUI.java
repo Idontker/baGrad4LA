@@ -77,17 +77,20 @@ public class GUI {
         double total_note = 0.0;
 
         for (int i = 0; i < 3; i++) {
-            if (Double.isNaN(res[i][1]) == false) {
-                total_etcs += res[i][1];
-                if (Double.isNaN(res[i][0]) == false) {
-                    total_note += res[i][0] * res[i][1];
-                }
-            }
+            total_etcs += res[i][1];
+            total_note += res[i][0] * res[i][1];
         }
+        total_note = Math.abs(total_etcs) > 0.0001 ? total_note / total_etcs : 0.0;
 
-        mainPanel.updateTotal(total_note / total_etcs, total_etcs);
+        mainPanel.updateTotal(total_note, total_etcs);
 
-        
+        double pred = 0.0;
+        pred += Math.abs(res[0][0]) > 0.0001 ? res[0][0] * 70 : total_note * 70;
+        pred += Math.abs(res[1][0]) > 0.0001 ? res[1][0] * 70 : total_note * 70;
+        pred += Math.abs(res[2][0]) > 0.0001 ? res[2][0] * 41 : total_note * 41;
+        pred /= 70 + 70 + 41;
+        mainPanel.updatePred(pred);
+
         Saver.save(faecherliste);
     }
 

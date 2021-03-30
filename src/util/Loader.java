@@ -35,7 +35,7 @@ public class Loader {
             System.exit(1);
         }
 
-        printFaecher(faecher);
+        // printFaecher(faecher);
 
         return faecher;
     }
