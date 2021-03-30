@@ -25,7 +25,9 @@ Analysis 1:                                         10:0
 Analysis 2:                                         10:0.5
 Analysis für Lehramt:                               10:1
 Funktionentheorie:                                  5:1
+Angewandte Mathematik:                              5:1
 Stochastische Modellbildung:                        10:1
+Mathematisches Seminar:                             5:1
 
 # EWS
 Allgemeine Pädagogik 1:                             5

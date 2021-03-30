@@ -1,6 +1,5 @@
 package gui;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import gui.buttons.ListenerGoToPage;
