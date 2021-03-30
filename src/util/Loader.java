@@ -24,8 +24,8 @@ public class Loader {
         this.path = path;
     }
 
-    public ArrayList<Fach> loadFaecher() {
-        ArrayList<Fach> faecher = new ArrayList<Fach>();
+    public HashMap<String,Fach> loadFaecher() {
+        HashMap<String,Fach> faecher = new HashMap<String,Fach>();
 
         try {
             loadSettingsInto(faecher);
@@ -40,7 +40,7 @@ public class Loader {
         return faecher;
     }
 
-    private void loadSettingsInto(ArrayList<Fach> faecher) throws FileNotFoundException {
+    private void loadSettingsInto(HashMap<String,Fach> faecher) throws FileNotFoundException {
 
         Scanner sc = opeFileScanner(path + "/" + settingsFilename);
         Fach fach = null;
@@ -51,7 +51,7 @@ public class Loader {
                 // do Nothing
             } else if (line.charAt(0) == '#') {
                 fach = new Fach(line.substring(1).trim());
-                faecher.add(fach);
+                faecher.put(fach.fachname, fach);
             } else {
                 String s[] = line.split(":");
                 if (s.length == 2) {
@@ -72,13 +72,13 @@ public class Loader {
 
     }
 
-    private void loadSaveInto(ArrayList<Fach> faecher) throws FileNotFoundException {
+    private void loadSaveInto(HashMap<String,Fach> faecher) throws FileNotFoundException {
         HashMap<String, Fach> map = loadSaveIntoMap();
         if (map == null) {
             return;
         }
 
-        for (Fach fach : faecher) {
+        for (Fach fach : faecher.values()) {
             if (map.containsKey(fach.fachname)) {
                 updateFachWithMap(map, fach);
             }
@@ -125,8 +125,8 @@ public class Loader {
         return map;
     }
 
-    private void printFaecher(ArrayList<Fach> faecher) {
-        for (Fach f : faecher) {
+    private void printFaecher(HashMap<String,Fach> faecher) {
+        for (Fach f : faecher.values()) {
             System.out.println("\t\t" + f.fachname);
             for (Modul m : f.module) {
                 System.out.println(m);

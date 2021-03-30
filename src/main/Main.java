@@ -3,7 +3,7 @@ package main;
 import gui.GUI;
 import util.*;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -13,11 +13,11 @@ public class Main {
 
         Loader loader = new Loader(path);
 
-        ArrayList<Fach> faecher = loader.loadFaecher();
+        HashMap<String,Fach> faecher = loader.loadFaecher();
 
         Saver.construct(path);
 
-        new GUI(faecher);
-        GUI.update();
+        GUI g = new GUI(faecher);
+        g.update();
     }
 }

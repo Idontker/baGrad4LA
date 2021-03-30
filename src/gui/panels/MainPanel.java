@@ -150,7 +150,7 @@ public class MainPanel extends GridPanel {
     @Override
     public void initButtons() {
         ArrayList<String> faechernamen = new ArrayList<String>();
-        for (Fach f : GUI.faecherliste) {
+        for (Fach f : GUI.gui.faechermap.values()) {
             if (f.fachname.equalsIgnoreCase("EWS") == false) {
                 faechernamen.add(f.fachname);
             }
@@ -169,7 +169,7 @@ public class MainPanel extends GridPanel {
         ActionListener al = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI.update();
+                GUI.gui.update();
             }
         };
         comboBox[0].addActionListener(al);

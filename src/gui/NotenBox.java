@@ -32,7 +32,7 @@ public class NotenBox extends MyComboBox {
 
                 modul.note = newValue;
 
-                GUI.update();
+                GUI.gui.update();
 
             }
 

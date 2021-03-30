@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Saver {
 
     private static Saver s;
 
-    public static void save(ArrayList<Fach> faecher) {
+    public static void save(HashMap<String, Fach> faecher) {
         s.saveFaecher(faecher);
     }
 
@@ -46,12 +46,12 @@ public class Saver {
         this.path = path;
     }
 
-    public void saveFaecher(ArrayList<Fach> faecher) {
+    public void saveFaecher(HashMap<String, Fach> faecher) {
         try {
             File file = createSaveFile();
             FileWriter writer = new FileWriter(file);
 
-            for (Fach fach : faecher) {
+            for (Fach fach : faecher.values()) {
                 writeFach(writer, fach);
             }
 
