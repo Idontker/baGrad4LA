@@ -4,8 +4,6 @@ import util.Fach;
 import util.Modul;
 
 public class Calculator {
-    private static final int FACH_ETCS = 70;
-    private static final int EWS_ETCS = 40;
 
     /**
      * 

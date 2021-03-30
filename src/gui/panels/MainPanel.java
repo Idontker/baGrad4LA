@@ -2,7 +2,7 @@ package gui.panels;
 
 import java.util.ArrayList;
 import java.util.Set;
-
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -23,6 +23,8 @@ public class MainPanel extends GridPanel {
     private JLabel label_fach1, label_fach2, label_fach3, label_ews;
     private JLabel label_note, label_etcs;
     private JLabel label_note1, label_note2, label_note3, label_etcs1, label_etcs2, label_etcs3;
+
+    private JLabel label_warning1, label_warning2;
     private JLabel[] label_goalETCS;
 
     private JLabel label_total, label_total_note, label_total_etcs;
@@ -32,7 +34,7 @@ public class MainPanel extends GridPanel {
     private JComboBox<String> comboBox[];
 
     public MainPanel() {
-        super(10, 6);
+        super(10, 7);
 
         createLabels();
         placeLabels();
@@ -96,6 +98,12 @@ public class MainPanel extends GridPanel {
         label_total_note.setVisible(true);
         label_total_etcs.setVisible(true);
 
+        // ===================================
+
+        label_warning1 = new JLabel("zu viele ETCS");
+        label_warning2 = new JLabel("zu viele ETCS");
+        label_warning1.setForeground(Color.red);
+        label_warning2.setForeground(Color.red);
     }
 
     private void placeLabels() {
@@ -122,6 +130,9 @@ public class MainPanel extends GridPanel {
         place(0, 4, label_total);
         place(2, 4, label_total_note);
         place(3, 4, label_total_etcs);
+
+        place(5, 1, label_warning1);
+        place(5, 2, label_warning2);
     }
 
     @Override
@@ -162,7 +173,7 @@ public class MainPanel extends GridPanel {
             change_modul[i] = new MyButton("Fachübersicht");
             change_modul[i].addActionListener(new ListenerGoToPage(comboBox[i]));
 
-            place(5, i + 1, change_modul[i]);
+            place(6, i + 1, change_modul[i]);
         }
 
         change_modul[2] = new MyButton("Fachübersicht");
@@ -203,25 +214,37 @@ public class MainPanel extends GridPanel {
     }
 
     public void updateETCS(double val, int fachnummer) {
-        JLabel label;
+        JLabel label, warning;
         switch (fachnummer) {
         case 0:
             label = label_etcs1;
+            warning = label_warning1;
             break;
         case 1:
             label = label_etcs2;
+            warning = label_warning2;
             break;
         case 2:
             label = label_etcs3;
+            warning = null;
             break;
         default:
             label = null;
+            warning = null;
         }
 
         val = Math.round(val * 10) / 10.0;
         String s = String.format("%.1f", val);
 
         label.setText(s);
+
+        if (warning != null) {
+            if (val > 70.001) {
+                warning.setVisible(true);
+            } else {
+                warning.setVisible(false);
+            }
+        }
     }
 
     public void updateTotal(double note, double etcs) {
