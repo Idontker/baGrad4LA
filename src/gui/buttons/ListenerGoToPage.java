@@ -19,13 +19,13 @@ public class ListenerGoToPage implements ActionListener {
 
     public ListenerGoToPage(JComboBox<String> combo) {
         this.goTo = null;
-        this.frame = GUI.frame;
+        this.frame = GUI.gui.frame;
         this.combo = combo;
     }
 
     public ListenerGoToPage(String goTo) {
         this.goTo = goTo;
-        this.frame = GUI.frame;
+        this.frame = GUI.gui.frame;
         this.combo = null;
     }
 
