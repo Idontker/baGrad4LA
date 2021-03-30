@@ -1,5 +1,6 @@
 package gui.panels;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import java.awt.event.ActionEvent;
@@ -10,8 +11,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 
 import gui.GUI;
+import gui.MyComboBox;
 import gui.buttons.ListenerGoToPage;
 import gui.buttons.MyButton;
+import util.Fach;
 
 public class MainPanel extends GridPanel {
 
@@ -123,13 +126,24 @@ public class MainPanel extends GridPanel {
 
     @Override
     public void initButtons() {
-        Set<String> set = GUI.FACH_PANEL_MAP.keySet();
-        String[] faecher = set.toArray(new String[set.size()]);
+        ArrayList<String> faechernamen = new ArrayList<String>();
+        for (Fach f : GUI.faecherliste) {
+            if (f.fachname.equalsIgnoreCase("EWS") == false) {
+                faechernamen.add(f.fachname);
+            }
+        }
+        System.out.println(faechernamen);
 
         comboBox = new JComboBox[2];
 
-        comboBox[0] = GUI.createDropDow(faecher);
-        comboBox[1] = GUI.createDropDow(faecher);
+        comboBox[0] = new MyComboBox(faechernamen);
+        comboBox[1] = new MyComboBox(faechernamen);
+
+        if (comboBox[0].getItemCount() >= 2) {
+            comboBox[0].setSelectedIndex(0);
+            comboBox[1].setSelectedIndex(1);
+        }
+
         ActionListener al = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -138,11 +152,6 @@ public class MainPanel extends GridPanel {
         };
         comboBox[0].addActionListener(al);
         comboBox[1].addActionListener(al);
-
-        if(comboBox[0].getItemCount() >= 4){
-            comboBox[0].setSelectedIndex(2);
-            comboBox[1].setSelectedIndex(3);
-        }
 
         place(1, 1, comboBox[0]);
         place(1, 2, comboBox[1]);
@@ -157,14 +166,19 @@ public class MainPanel extends GridPanel {
         }
 
         change_modul[2] = new MyButton("Fachübersicht");
-        FachPanel ewsPanel = GUI.FACH_PANEL_MAP.get("EWS");
-        change_modul[2].addActionListener(new ListenerGoToPage(ewsPanel));
+        change_modul[2].addActionListener(new ListenerGoToPage("EWS"));
         place(5, 3, change_modul[2]);
     }
 
     public String getComboBoxString(int i) {
         return (String) comboBox[i].getSelectedItem();
     }
+
+    // ============================================
+    // ============================================
+    // ============= Update stuff =================
+    // ============================================
+    // ============================================
 
     public void updateNote(double val, int fachnummer) {
         JLabel label;

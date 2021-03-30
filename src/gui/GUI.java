@@ -3,9 +3,9 @@ package gui;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.swing.JComboBox;
-
+import gui.buttons.ListenerGoToPage;
 import gui.panels.FachPanel;
+import gui.panels.GridPanel;
 import gui.panels.MainPanel;
 import main.Calculator;
 import util.Fach;
@@ -13,56 +13,47 @@ import util.Fach;
 public class GUI {
 
     public static MainFrame frame;
-    public static MainPanel mainPanel;
+    public static ArrayList<Fach> faecherliste;
 
-    public static HashMap<String, FachPanel> FACH_PANEL_MAP;
-    private static ArrayList<Fach> faecherliste;
-
-    public static String DEFAULT_AUSWAHL = "bitte auswählen";
+    private static HashMap<String, GridPanel> panels;
 
     public GUI(ArrayList<Fach> faecherliste) {
         GUI.faecherliste = faecherliste;
+        GUI.panels = ListenerGoToPage.PANEL_MAP;
 
         frame = new MainFrame(1080, 480, 10, 6);
 
-        MainPanel p = new MainPanel();
-        GUI.mainPanel = p;
+        MainPanel mainPanel = new MainPanel();
+        panels.put("Main", mainPanel);
 
         // build Fachpanels
-        FACH_PANEL_MAP = new HashMap<String, FachPanel>();
         for (Fach fach : faecherliste) {
             FachPanel f = new FachPanel(fach);
             f.initButtons();
-            FACH_PANEL_MAP.put(fach.fachname, f);
+            panels.put(fach.fachname, f);
+
         }
 
-        p.initButtons();
-        frame.showPanel(p);
+        mainPanel.initButtons();
+        frame.showPanel(mainPanel);
 
         frame.setVisible(true);
     }
 
-    public static JComboBox<String> createDropDow(String items[]) {
-        String[] tmp = new String[items.length + 1];
-        tmp[0] = DEFAULT_AUSWAHL;
-        for (int i = 0; i < items.length; i++) {
-            tmp[i + 1] = items[i];
-        }
-
-        JComboBox<String> cmb = new JComboBox<String>(tmp);
-        cmb.setSelectedItem(0);
-        cmb.setVisible(true);
-        return cmb;
-    }
+    // ==========================================================
+    // ==========================================================
+    // ==========================================================
 
     public static void update() {
+        MainPanel mainPanel = (MainPanel) panels.get("Main");
+
         String f1 = mainPanel.getComboBoxString(0);
         String f2 = mainPanel.getComboBoxString(1);
 
         FachPanel fp[] = new FachPanel[3];
-        fp[0] = GUI.FACH_PANEL_MAP.get(f1);
-        fp[1] = GUI.FACH_PANEL_MAP.get(f2);
-        fp[2] = GUI.FACH_PANEL_MAP.get("EWS");
+        fp[0] = (FachPanel) panels.get(f1);
+        fp[1] = (FachPanel) panels.get(f2);
+        fp[2] = (FachPanel) panels.get("EWS");
 
         double res[][] = new double[3][];
 
@@ -80,7 +71,7 @@ public class GUI {
             }
         }
 
-        double total_etcs  = 0.0;
+        double total_etcs = 0.0;
         double total_note = 0.0;
 
         for (int i = 0; i < 3; i++) {
@@ -95,12 +86,15 @@ public class GUI {
         mainPanel.updateTotal(total_note / total_etcs, total_etcs);
     }
 
-    private static double[] updateFach(String fach) {
-        if (fach.equals(DEFAULT_AUSWAHL)) {
+    // TODO: aufteilen in Parameter mit Fach und mit String - oben dann austauschen,
+    // da man oben bereits ein Fachpanel sucht
+    private static double[] updateFach(String fachname) {
+        Fach fach = getFachByString(fachname);
+        if (fach == null) {
             return new double[] { 0, 0 };
         }
 
-        double tmp[] = Calculator.calcFach(getFachByString(fach));
+        double tmp[] = Calculator.calcFach(fach);
         return new double[] { tmp[1], tmp[2] };
     }
 

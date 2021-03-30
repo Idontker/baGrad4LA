@@ -2,18 +2,16 @@ package gui;
 
 import java.awt.event.*;
 
-import javax.swing.JComboBox;
-
 import util.Modul;
 
-public class NotenBox extends JComboBox<String> {
+public class NotenBox extends MyComboBox {
 
     private static final long serialVersionUID = 1L;
-    private static final String[] noten = new String[] { GUI.DEFAULT_AUSWAHL, "1.0", "1.3", "1.7", "2.0", "2.3", "2.7",
-            "3.0", "3.3", "3.7", "4.0" };
+    private static final String[] noten = new String[] { "1.0", "1.3", "1.7", "2.0", "2.3", "2.7", "3.0", "3.3", "3.7",
+            "4.0" };
 
     public NotenBox(Modul modul) {
-        super(noten);
+        super(noten, true);
 
         this.setSelectedItem(indexOfGrad(modul.note));
         this.setVisible(true);
