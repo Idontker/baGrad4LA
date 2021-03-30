@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class Loader {
@@ -92,7 +91,7 @@ public class Loader {
         for (Modul modul : fach.module) {
             for (Modul other : saved.module) {
                 if (modul.name.equalsIgnoreCase(other.name)) {
-                    modul.note = modul.note;
+                    modul.note = other.note;
                 }
             }
         }
@@ -122,6 +121,7 @@ public class Loader {
             }
         }
 
+        sc.close();
         return map;
     }
 
