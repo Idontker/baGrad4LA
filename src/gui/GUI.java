@@ -9,6 +9,7 @@ import gui.panels.GridPanel;
 import gui.panels.MainPanel;
 import main.Calculator;
 import util.Fach;
+import util.Saver;
 
 public class GUI {
 
@@ -45,6 +46,7 @@ public class GUI {
     // ==========================================================
 
     public static void update() {
+
         MainPanel mainPanel = (MainPanel) panels.get("Main");
 
         String f1 = mainPanel.getComboBoxString(0);
@@ -84,6 +86,9 @@ public class GUI {
         }
 
         mainPanel.updateTotal(total_note / total_etcs, total_etcs);
+
+        
+        Saver.save(faecherliste);
     }
 
     // TODO: aufteilen in Parameter mit Fach und mit String - oben dann austauschen,

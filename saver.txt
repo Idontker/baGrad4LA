@@ -1,0 +1,9 @@
+#Informatik
+Algorithmen und Datenstrukturen,2.0
+Theoretische Informatik für Lehramtsstudierende,1.3
+Parallele und Funktionale Programmierung,1.0
+Implementierung von Datenbanksystemen,1.3
+#Mathematik
+Körpertheorie,1.3
+Analysis 1,1.3
+Analysis für Lehramt,1.0
