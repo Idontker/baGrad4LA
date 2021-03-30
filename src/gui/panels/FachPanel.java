@@ -4,13 +4,12 @@ import javax.swing.JLabel;
 
 import gui.buttons.*;
 import util.Fach;
+import util.Modul;
 import gui.*;
 
 public class FachPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
-    private final String[] noten = new String[] { "1.0", "1.3", "1.7", "2.0", "2.3", "2.7", "3.0", "3.3", "3.7",
-            "4.0" };
 
     private JLabel fachLabel, label_note, label_ETCS;
     private Fach fach;
@@ -63,11 +62,12 @@ public class FachPanel extends GridPanel {
 
     private void initModuls() {
         for (int i = 0; i < fach.module.size(); i++) {
+            Modul modul = fach.module.get(i);
 
-            JLabel label = new JLabel(fach.module.get(i).name);
+            JLabel label = new JLabel(modul.name);
             label.setVisible(true);
 
-            NotenBox cb = new NotenBox(fach.module.get(i));
+            NotenBox cb = new NotenBox(modul);
 
             place(1, i + 1, label);
             place(2, i + 1, cb);
