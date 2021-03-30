@@ -13,7 +13,9 @@ public class NotenBox extends MyComboBox {
     public NotenBox(Modul modul) {
         super(noten, true);
 
-        this.setSelectedItem(indexOfGrad(modul.note));
+        int i = indexOfGrad(modul.note) + 1;
+
+        this.setSelectedItem(this.getItemAt(i));
         this.setVisible(true);
 
         this.addActionListener(new ActionListener() {
@@ -38,14 +40,14 @@ public class NotenBox extends MyComboBox {
     }
 
     private int indexOfGrad(double d) {
-        String grad = String.format("%.2f", Math.round(d * 10) / 10.0);
+        for (int i = 0; i < noten.length; i++) {
+            double grad = Double.parseDouble(noten[i]);
 
-        for (int i = 1; i < noten.length; i++) {
-            if (grad.equals(noten[i]) == true) {
+            if (Math.abs(grad - d) < 0.001) {
                 return i;
             }
         }
-        return 0;
+        return -1;
 
     }
 }
