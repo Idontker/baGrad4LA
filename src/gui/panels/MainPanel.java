@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
@@ -22,6 +21,8 @@ public class MainPanel extends GridPanel {
     private JLabel label_note, label_etcs;
     private JLabel label_note1, label_note2, label_note3, label_etcs1, label_etcs2, label_etcs3;
     private JLabel[] label_goalETCS;
+
+    private JLabel label_total, label_total_note, label_total_etcs;
 
     private JButton[] change_modul;
 
@@ -83,6 +84,15 @@ public class MainPanel extends GridPanel {
             label_goalETCS[1].setVisible(true);
         }
 
+        // ===================================
+
+        label_total = new JLabel("Gesamt:");
+        label_total_note = new JLabel("0.0");
+        label_total_etcs = new JLabel("0 ETCS");
+        label_total.setVisible(true);
+        label_total_note.setVisible(true);
+        label_total_etcs.setVisible(true);
+
     }
 
     private void placeLabels() {
@@ -105,6 +115,10 @@ public class MainPanel extends GridPanel {
         for (int i = 0; i < label_goalETCS.length; i++) {
             place(4, i, label_goalETCS[i]);
         }
+
+        place(0, 4, label_total);
+        place(2, 4, label_total_note);
+        place(3, 4, label_total_etcs);
     }
 
     @Override
@@ -124,6 +138,11 @@ public class MainPanel extends GridPanel {
         };
         comboBox[0].addActionListener(al);
         comboBox[1].addActionListener(al);
+
+        if(comboBox[0].getItemCount() >= 4){
+            comboBox[0].setSelectedIndex(2);
+            comboBox[1].setSelectedIndex(3);
+        }
 
         place(1, 1, comboBox[0]);
         place(1, 2, comboBox[1]);
@@ -163,10 +182,8 @@ public class MainPanel extends GridPanel {
             label = null;
         }
 
-        System.out.println(fachnummer + ":" + val);
-
         val = Math.round(val * 100) / 100.0;
-        String s = String.format("%.1f", val);
+        String s = String.format("%.2f", val);
 
         label.setText(s);
     }
@@ -191,5 +208,19 @@ public class MainPanel extends GridPanel {
         String s = String.format("%.1f", val);
 
         label.setText(s);
+    }
+
+    public void updateTotal(double note, double etcs) {
+
+        note = Math.round(note * 100) / 100.0;
+        String s = String.format("%.2f", note);
+
+        label_total_note.setText(s);
+
+        etcs = Math.round(etcs * 10) / 10.0;
+        s = String.format("%.1f", etcs);
+
+        label_total_etcs.setText(s + " ETCS");
+
     }
 }

@@ -15,12 +15,10 @@ public class GUI {
     public static MainFrame frame;
     public static MainPanel mainPanel;
 
-    // public static String[] FACHERLISTE; // = new String[] { "None", "Mathematik",
-    // "Informatik", "Wirtschaft", "Englisch" };
     public static HashMap<String, FachPanel> FACH_PANEL_MAP;
     private static ArrayList<Fach> faecherliste;
 
-    private static String DEFAULT_AUSWAHL = "bitte auswählen";
+    public static String DEFAULT_AUSWAHL = "bitte auswählen";
 
     public GUI(ArrayList<Fach> faecherliste) {
         GUI.faecherliste = faecherliste;
@@ -58,21 +56,43 @@ public class GUI {
     }
 
     public static void update() {
-        // FachPanel f1 = GUI.FACH_PANEL_MAP.get(mainPanel.getComboBoxString(0));
-        // FachPanel f2 = GUI.FACH_PANEL_MAP.get(mainPanel.getComboBoxString(1));
         String f1 = mainPanel.getComboBoxString(0);
         String f2 = mainPanel.getComboBoxString(1);
 
-        double[] r1 = updateFach(f1);
-        double[] r2 = updateFach(f2);
-        double[] r3 = updateFach("EWS");
-        mainPanel.updateNote(r1[0], 0);
-        mainPanel.updateNote(r2[0], 1);
-        mainPanel.updateNote(r3[0], 2);
+        FachPanel fp[] = new FachPanel[3];
+        fp[0] = GUI.FACH_PANEL_MAP.get(f1);
+        fp[1] = GUI.FACH_PANEL_MAP.get(f2);
+        fp[2] = GUI.FACH_PANEL_MAP.get("EWS");
 
-        mainPanel.updateETCS(r1[1], 0);
-        mainPanel.updateETCS(r2[1], 1);
-        mainPanel.updateETCS(r3[1], 2);
+        double res[][] = new double[3][];
+
+        res[0] = updateFach(f1);
+        res[1] = updateFach(f2);
+        res[2] = updateFach("EWS");
+
+        for (int i = 0; i < 3; i++) {
+            mainPanel.updateNote(res[i][0], i);
+            mainPanel.updateETCS(res[i][1], i);
+
+            if (fp[i] != null) {
+                fp[i].updateNote(res[i][0]);
+                fp[i].updateETCS(res[i][1]);
+            }
+        }
+
+        double total_etcs  = 0.0;
+        double total_note = 0.0;
+
+        for (int i = 0; i < 3; i++) {
+            if (Double.isNaN(res[i][1]) == false) {
+                total_etcs += res[i][1];
+                if (Double.isNaN(res[i][0]) == false) {
+                    total_note += res[i][0] * res[i][1];
+                }
+            }
+        }
+
+        mainPanel.updateTotal(total_note / total_etcs, total_etcs);
     }
 
     private static double[] updateFach(String fach) {
