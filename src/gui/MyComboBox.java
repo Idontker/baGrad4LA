@@ -10,6 +10,10 @@ public class MyComboBox extends JComboBox<String> {
 
     private static String DEFAULT_AUSWAHL = "bitte auswählen";
 
+    public MyComboBox() {
+        this(new String[0]);
+    }
+
     public MyComboBox(ArrayList<String> items) {
         this(items, false);
     }
@@ -38,13 +42,13 @@ public class MyComboBox extends JComboBox<String> {
 
     }
 
-    private void addOptions(ArrayList<String> items) {
+    public void addOptions(ArrayList<String> items) {
         for (String s : items) {
             this.addItem(s);
         }
     }
 
-    private void addOptions(String items[]) {
+    public void addOptions(String items[]) {
         for (String s : items) {
             this.addItem(s);
         }

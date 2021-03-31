@@ -6,6 +6,7 @@ import gui.buttons.ListenerGoToPage;
 import gui.panels.FachPanel;
 import gui.panels.GridPanel;
 import gui.panels.MainPanel;
+import gui.panels.StartPanel;
 import main.Calculator;
 import util.Fach;
 import util.Saver;
@@ -17,28 +18,31 @@ public class GUI {
     public MainFrame frame;
     public HashMap<String, Fach> faechermap;
 
+    private HashMap<String, HashMap<String, Fach>> map;
+
     private HashMap<String, GridPanel> panels;
 
-    public GUI(HashMap<String, Fach> faecherliste) {
+    public GUI(HashMap<String, HashMap<String, Fach>> map) {
         GUI.gui = this;
 
-        this.faechermap = faecherliste;
+        // this.faechermap = faechermap;
+        this.map = map;
 
         panels = ListenerGoToPage.PANEL_MAP;
-        frame = new MainFrame(1080, 480);
+        // frame = new MainFrame(1080, 480);
+        frame = new MainFrame(480, 460);
 
-        MainPanel mainPanel = new MainPanel();
-        panels.put("Main", mainPanel);
+        StartPanel startPanel = new StartPanel(map);
+        frame.showPanel(startPanel);
 
-        // build Fachpanels
-        for (Fach fach : faecherliste.values()) {
-            FachPanel f = new FachPanel(fach);
-            f.initButtons();
-            panels.put(fach.fachname, f);
-        }
-
-        mainPanel.initButtons();
-        frame.showPanel(mainPanel);
+        /*
+         * MainPanel mainPanel = new MainPanel(); panels.put("Main", mainPanel);
+         * 
+         * // build Fachpanels for (Fach fach : faecherliste.values()) { FachPanel f =
+         * new FachPanel(fach); f.initButtons(); panels.put(fach.fachname, f); }
+         * 
+         * mainPanel.initButtons(); frame.showPanel(mainPanel);
+         */
 
         frame.setVisible(true);
     }
