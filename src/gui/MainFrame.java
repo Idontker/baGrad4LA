@@ -7,7 +7,7 @@ import gui.panels.*;
 public class MainFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
-    
+
     private GridPanel currentPanel;
 
     public MainFrame() {
@@ -15,10 +15,6 @@ public class MainFrame extends JFrame {
     }
 
     public MainFrame(int x, int y) {
-        this(x, y, 5, 5);
-    }
-
-    public MainFrame(int x, int y, int rows, int cols) {
         this.setSize(x, y);
         this.setTitle("Notenberechnung Lehramt Gymnasium");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,11 +30,11 @@ public class MainFrame extends JFrame {
     }
 
     public void showPanel(GridPanel next) {
-        if(currentPanel != null){
+        if (currentPanel != null) {
             currentPanel.setVisible(false);
             this.remove(currentPanel);
         }
-        
+
         currentPanel = next;
         next.setVisible(true);
         this.add(next);

@@ -25,7 +25,7 @@ public class GUI {
         this.faechermap = faecherliste;
 
         panels = ListenerGoToPage.PANEL_MAP;
-        frame = new MainFrame(1080, 480, 10, 6);
+        frame = new MainFrame(1080, 480);
 
         MainPanel mainPanel = new MainPanel();
         panels.put("Main", mainPanel);
