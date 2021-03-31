@@ -53,3 +53,14 @@ Volkswirtschaftliches Seminar:                      5
 Wirtschaftsprivatrecht (Recht 2):                   5
 Vertiefungsmodul VWL 1:                             5
 Vertiefungsmodul VWL 2:                             5
+
+# Englisch
+Basismodul Language (Basis 1):                      5
+Basismodul Linguistics (Basis 2+3):                 10
+Basismodul Literature  (Basis 4+5):                 10
+Basismodul Culture/Landeskunde (Basis 6+7):         10
+Zwischenmodul Linguistics:                          10
+Zwischenmodul Literature:                           10
+Zwischenmodul Language:                             5
+Aufbaumodul Language:                               5
+Hauptmodul Language:                                5
