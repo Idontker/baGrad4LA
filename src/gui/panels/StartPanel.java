@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -22,6 +23,7 @@ public class StartPanel extends GridPanel {
     private JLabel label_name, label_fach1, label_fach2, label_schulart;
     private MyComboBox cb_schulart, cb_fach1, cb_fach2;
     private JTextField textField_name;
+    private JButton button_weiter;
 
     private HashMap<String, HashMap<String, Fach>> map;
 
@@ -84,7 +86,15 @@ public class StartPanel extends GridPanel {
 
     @Override
     public void initButtons() {
+        button_weiter = new JButton("Weiter");
+        button_weiter.setVisible(false);
+        button_weiter.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                goToOverview();
+            }
+        });
 
+        place(1, 5, button_weiter);
     }
 
     private void updateCBFach() {
@@ -92,11 +102,13 @@ public class StartPanel extends GridPanel {
         cb_fach2.removeAllItems();
 
         if (cb_schulart.getSelectedIndex() == 0) {
-            // cb_fach1.setVisible(false);
-            // cb_fach2.setVisible(false);
+            button_weiter.setVisible(false);
+            cb_fach1.setVisible(false);
+            cb_fach2.setVisible(false);
         } else {
             String schulart = (String) cb_schulart.getSelectedItem();
 
+            button_weiter.setVisible(true);
             cb_fach1.setVisible(true);
             cb_fach2.setVisible(true);
 
@@ -116,7 +128,22 @@ public class StartPanel extends GridPanel {
                 cb_fach2.setSelectedIndex(1);
             }
         }
+    }
 
+    private void goToOverview() {
+        String schulart = (String) cb_schulart.getSelectedItem();
+        HashMap<String, Fach> fachmap = map.get(schulart);
+
+        String f1 = (String) cb_fach1.getSelectedItem();
+        String f2 = (String) cb_fach2.getSelectedItem();
+
+        Fach fach1 = fachmap.get(f1);
+        Fach fach2 = fachmap.get(f2);
+        Fach ews = fachmap.get("EWS");
+
+        GridPanel overview = new OverviewPanel(fach1, fach2, ews);
+
+        frame.showPanel(overview);
     }
 
 }

@@ -19,7 +19,6 @@ public class GUI {
     public HashMap<String, Fach> faechermap;
 
     private HashMap<String, HashMap<String, Fach>> map;
-
     private HashMap<String, GridPanel> panels;
 
     public GUI(HashMap<String, HashMap<String, Fach>> map) {
@@ -33,6 +32,7 @@ public class GUI {
         frame = new MainFrame(480, 460);
 
         StartPanel startPanel = new StartPanel(map);
+        startPanel.setFrame(frame);
         frame.showPanel(startPanel);
 
         /*
