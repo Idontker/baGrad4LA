@@ -9,7 +9,6 @@ import java.util.Scanner;
 public class Loader {
 
     private String path;
-    private final String settingsFilename = "gymnasium.cfg";
 
     public Loader() {
         this(".");
@@ -23,11 +22,13 @@ public class Loader {
         this.path = path;
     }
 
-    public HashMap<String,Fach> loadFaecher() {
-        HashMap<String,Fach> faecher = new HashMap<String,Fach>();
+    public HashMap<String, Fach> loadFaecher(String schulart) {
+        schulart = schulart.toLowerCase();
+
+        HashMap<String, Fach> faecher = new HashMap<String, Fach>();
 
         try {
-            loadSettingsInto(faecher);
+            loadSettingsInto(faecher, schulart);
             loadSaveInto(faecher);
         } catch (IOException e) {
             e.printStackTrace();
@@ -39,9 +40,9 @@ public class Loader {
         return faecher;
     }
 
-    private void loadSettingsInto(HashMap<String,Fach> faecher) throws FileNotFoundException {
+    private void loadSettingsInto(HashMap<String, Fach> faecher, String schulart) throws FileNotFoundException {
 
-        Scanner sc = opeFileScanner(path + "/" + settingsFilename);
+        Scanner sc = opeFileScanner(path + "/" + schulart + ".cfg");
         Fach fach = null;
 
         while (sc.hasNextLine()) {
@@ -52,13 +53,14 @@ public class Loader {
                 fach = new Fach(line.substring(1).trim());
                 faecher.put(fach.fachname, fach);
             } else {
-                String s[] = line.split(":");
-                if (s.length == 2) {
-                    fach.module.add(new Modul(Double.parseDouble(s[1].trim()), s[0].trim()));
-                } else if (s.length == 3) {
-                    fach.module.add(
-                            new Modul(Double.parseDouble(s[1].trim()), s[0].trim(), Double.parseDouble(s[2].trim())));
-                }
+                // String s[] = line.split(":");
+                // if (s.length == 2 || s.length == 3) {
+                Modul m = new Modul(line, ":");
+                fach.module.add(m);
+                // fach.module.add(new Modul(Double.parseDouble(s[1].trim()), s[0].trim()));
+                // fach.module.add(new Modul(Double.parseDouble(s[1].trim()), s[0].trim(),
+                // Double.parseDouble(s[2].trim())));
+                // }
             }
         }
 
@@ -71,7 +73,7 @@ public class Loader {
 
     }
 
-    private void loadSaveInto(HashMap<String,Fach> faecher) throws FileNotFoundException {
+    private void loadSaveInto(HashMap<String, Fach> faecher) throws FileNotFoundException {
         HashMap<String, Fach> map = loadSaveIntoMap();
         if (map == null) {
             return;
@@ -114,8 +116,9 @@ public class Loader {
                 fach = new Fach(line.substring(1).trim());
                 map.put(fach.fachname, fach);
             } else {
-                String s[] = line.split(",");
-                Modul m = new Modul(Double.parseDouble(s[1].trim()), 0, s[0].trim());
+                Modul m = new Modul(line, ",");
+                // String s[] = line.split(",");
+                // Modul m = new Modul(Double.parseDouble(s[1].trim()), 0, s[0].trim());
                 fach.module.add(m);
             }
         }
@@ -124,7 +127,7 @@ public class Loader {
         return map;
     }
 
-    private void printFaecher(HashMap<String,Fach> faecher) {
+    private void printFaecher(HashMap<String, Fach> faecher) {
         for (Fach f : faecher.values()) {
             System.out.println("\t\t" + f.fachname);
             for (Modul m : f.module) {
