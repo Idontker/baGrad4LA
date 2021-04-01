@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Loader {
 
     private String path;
-    private final String settingsFilename = "faecher.txt";
+    private final String settingsFilename = "gymnasium.cfg";
 
     public Loader() {
         this(".");
