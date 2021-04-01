@@ -73,7 +73,7 @@ public class Saver {
                     writer.append(header + "\n");
                     first = false;
                 }
-                writer.append(m.name + "," + m.note + "\n");
+                writer.append(m.note + "," + m.name + "\n");
             }
         }
     }
