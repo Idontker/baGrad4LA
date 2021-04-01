@@ -11,10 +11,13 @@ import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import gui.HintTextField;
 import gui.MyComboBox;
 import util.Fach;
 
 public class StartPanel extends GridPanel {
+
+    private static final long serialVersionUID = 1L;
 
     private JLabel label_name, label_fach1, label_fach2, label_schulart;
     private MyComboBox cb_schulart, cb_fach1, cb_fach2;
@@ -65,12 +68,11 @@ public class StartPanel extends GridPanel {
             }
         });
 
-        textField_name = new JTextField("insert name", 10);
+        textField_name = new HintTextField("insert name");
 
         cb_fach1 = new MyComboBox();
         cb_fach2 = new MyComboBox();
 
-        textField_name.setVisible(true);
         cb_fach1.setVisible(false);
         cb_fach2.setVisible(false);
 
