@@ -73,7 +73,7 @@ public class Modul {
     }
 
     public boolean showIfNebenfachIs(String nebenfachname) {
-        boolean ret = false;
+        boolean ret = true;
 
         if (restricted_fach.size() > 0) {
             ret = !restricted_fach.contains(nebenfachname);
@@ -81,7 +81,7 @@ public class Modul {
         // if (necessary_fach.size() > 0) {
 
         // }
-
+        System.out.println(ret + "\t" + name + "\t" + nebenfachname + "\t"+ restricted_fach);
         return ret;
     }
 

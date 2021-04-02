@@ -64,13 +64,20 @@ public class FachPanel extends GridPanel {
         for (int i = 0; i < fach.module.size(); i++) {
             Modul modul = fach.module.get(i);
 
-            JLabel label = new JLabel(modul.name);
-            label.setVisible(true);
+            //TODO: hier muss das Nebenfach auch wirklich übergeben werden
+            // daszu Signatur von showIf ändern, sodass es eine Liste akzeptiert. 
+            // und zu begin dieser init Methode eine Liste der Fächer erstellen
+            // das aktuelle Fach muss nicht gelöscht werden, da es nicht schadet
+            if (modul.showIfNebenfachIs(fach.fachname)) {
 
-            NotenBox cb = new NotenBox(modul);
+                JLabel label = new JLabel(modul.name);
+                label.setVisible(true);
 
-            place(1, i + 1, label);
-            place(2, i + 1, cb);
+                NotenBox cb = new NotenBox(modul);
+
+                place(1, i + 1, label);
+                place(2, i + 1, cb);
+            }
         }
     }
 }
