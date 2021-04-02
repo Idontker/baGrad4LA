@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import gui.buttons.ListenerGoToPage;
 import gui.buttons.MyButton;
 import util.Fach;
+import util.Saver;
+import main.Calculator;
 
 public class OverviewPanel extends GridPanel {
 
@@ -25,6 +27,7 @@ public class OverviewPanel extends GridPanel {
     private JLabel label_pred, label_pred_note;
 
     private Fach fach[];
+    private FachPanel fachPanel[];
 
     private JButton[] change_modul;
 
@@ -108,10 +111,12 @@ public class OverviewPanel extends GridPanel {
     }
 
     private void createFachPanels() {
+        fachPanel = new FachPanel[fach.length];
+
         for (int i = 0; i < fach.length; i++) {
-            FachPanel fp = new FachPanel(fach[i]);
-            fp.initButtons();
-            ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fp);
+            fachPanel[i] = new FachPanel(fach[i]);
+            fachPanel[i].initButtons();
+            ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fachPanel[i]);
         }
     }
 
@@ -125,6 +130,127 @@ public class OverviewPanel extends GridPanel {
 
             place(6, i + 1, change_modul[i]);
         }
+    }
+
+    public void update() {
+        // ==============================
+        // pull and update data from fachPanels
+        // ==============================
+
+        double res[][] = new double[fach.length][];
+
+        for (int i = 0; i < fach.length; i++) {
+            res[i] = updateFach(fach[i]);
+        }
+
+        // ==============================
+        // update Panels with new data
+        // ==============================
+
+        for (int i = 0; i < 3; i++) {
+            this.updateNote(res[i][0], i);
+            this.updateETCS(res[i][1], i);
+
+            fachPanel[i].updateETCS(res[i][1]);
+            fachPanel[i].updateNote(res[i][0]);
+
+        }
+
+        // ==============================
+        // update totals
+        // ==============================
+
+        double total_etcs = 0.0;
+        double total_note = 0.0;
+
+        for (int i = 0; i < 3; i++) {
+            total_etcs += res[i][1];
+            total_note += res[i][0] * res[i][1];
+        }
+        total_note = Math.abs(total_etcs) > 0.0001 ? total_note / total_etcs : 0.0;
+
+        this.updateTotal(total_note, total_etcs);
+
+        // ==============================
+        // update pred
+        // ==============================
+
+        double pred = 0.0;
+        pred += Math.abs(res[0][0]) > 0.0001 ? res[0][0] * 70 : total_note * 70;
+        pred += Math.abs(res[1][0]) > 0.0001 ? res[1][0] * 70 : total_note * 70;
+        pred += Math.abs(res[2][0]) > 0.0001 ? res[2][0] * 41 : total_note * 41;
+        pred /= 70 + 70 + 41;
+        this.updatePred(pred);
+
+        // ==============================
+        // Save updates
+        // ==============================
+
+        Saver.save(fach);
+    }
+
+    private double[] updateFach(Fach fach) {
+        double tmp[] = Calculator.calcFach(fach);
+        return new double[] { tmp[1], tmp[2] };
+    }
+
+    // ============================================
+    // ============================================
+    // ============= Update stuff =================
+    // ============================================
+    // ============================================
+
+    public void updateNote(double val, int fachnummer) {
+        label_fachnote[fachnummer].setText(formatGrad(val));
+    }
+
+    public void updateETCS(double val, int fachnummer) {
+        label_fachetcs[fachnummer].setText(formatETCS(val));
+
+        if (label_warning[fachnummer] != null) {
+            if (val > 70.001) {
+                label_warning[fachnummer].setVisible(true);
+            } else {
+                label_warning[fachnummer].setVisible(false);
+            }
+        }
+    }
+
+    public void updateTotal(double note, double etcs) {
+        String s = formatGrad(note);
+        label_total_note.setText(s);
+
+        s = formatETCS(etcs);
+
+        label_total_etcs.setText(s + " ETCS");
+    }
+
+    public void updatePred(double pred) {
+        String s = formatGrad(pred);
+        label_pred_note.setText(s);
+    }
+
+    // ============================================
+    // ============================================
+    // ============= Format Stuff =================
+    // ============================================
+    // ============================================
+
+    private String formatGrad(double d) {
+        if (d == 0.0 || Double.isNaN(d)) {
+            return "???";
+        }
+        return roundedDoubleAsString(2, d);
+    }
+
+    private String formatETCS(double d) {
+        return roundedDoubleAsString(1, d);
+    }
+
+    private String roundedDoubleAsString(int digits, double d) {
+        double expo = Math.pow(10, digits);
+        d = Math.round(d * expo) / expo;
+        return String.format("%." + digits + "f", d);
     }
 
 }
