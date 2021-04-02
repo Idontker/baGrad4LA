@@ -2,8 +2,11 @@ package gui.panels;
 
 import java.awt.Color;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import gui.buttons.ListenerGoToPage;
+import gui.buttons.MyButton;
 import util.Fach;
 
 public class OverviewPanel extends GridPanel {
@@ -20,27 +23,30 @@ public class OverviewPanel extends GridPanel {
     private JLabel label_total, label_total_note, label_total_etcs;
     private JLabel label_pred, label_pred_note;
 
-    private Fach fach1, fach2, ews;
+    private Fach fach[];
+
+    private JButton[] change_modul;
 
     public OverviewPanel(Fach fach1, Fach fach2, Fach ews) {
         super(10, 7);
 
-        this.fach1 = fach1;
-        this.fach2 = fach2;
-        this.ews = ews;
+        fach = new Fach[3];
+        fach[0] = fach1;
+        fach[1] = fach2;
+        fach[2] = ews;
 
         createLabels();
         placeLabels();
     }
 
     private void createLabels() {
-        label_fach1 = new JLabel(fach1.fachname);
+        label_fach1 = new JLabel(fach[0].fachname);
         label_fach1.setVisible(true);
 
-        label_fach2 = new JLabel(fach2.fachname);
+        label_fach2 = new JLabel(fach[1].fachname);
         label_fach2.setVisible(true);
 
-        label_ews = new JLabel(ews.fachname);
+        label_ews = new JLabel(fach[2].fachname);
         label_ews.setVisible(true);
         // ===================================
 
@@ -137,7 +143,19 @@ public class OverviewPanel extends GridPanel {
 
     @Override
     public void initButtons() {
-        // TODO Auto-generated method stub
+        change_modul = new JButton[3];
+
+        for (int i = 0; i < 2; i++) {
+            change_modul[i] = new MyButton("Fachübersicht");
+            change_modul[0].addActionListener(new ListenerGoToPage(fach[0].fachname));
+
+            place(6, i + 1, change_modul[i]);
+        }
+        change_modul[1].addActionListener(new ListenerGoToPage(fach[1].fachname));
+
+        change_modul[2] = new MyButton("Fachübersicht");
+        change_modul[2].addActionListener(new ListenerGoToPage(""));
+        place(6, 3, change_modul[2]);
 
     }
 
