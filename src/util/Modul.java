@@ -11,6 +11,9 @@ public class Modul {
     public ArrayList<String> necessary_fach = new ArrayList<String>();
 
     public Modul(String loadedString, String divider) {
+        // default value for gewicht:
+        gewicht = 1.0;
+
         String s[] = loadedString.split(divider);
         for (int i = 0; i < s.length; i++) {
             s[i].trim();

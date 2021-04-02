@@ -1,6 +1,7 @@
 package gui.panels;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,10 +42,10 @@ public class OverviewPanel extends GridPanel {
 
         createLabels();
         placeLabels();
-
         createFachPanels();
-
         initButtons();
+
+        update();
 
     }
 
@@ -65,7 +66,7 @@ public class OverviewPanel extends GridPanel {
             label_fachetcs[i] = new JLabel("ETCS " + i);
             label_warning[i] = new JLabel("zu viele ETCS");
             label_warning[i].setForeground(Color.red);
-            // label_warning[i].setVisible(true);
+            label_warning[i].setVisible(false);
 
             if (fach[i].fachname.equals("EWS")) {
                 label_fachgoalETCS[i] = new JLabel("30 ETCS");
@@ -122,9 +123,9 @@ public class OverviewPanel extends GridPanel {
 
     @Override
     public void initButtons() {
-        change_modul = new JButton[3];
+        change_modul = new JButton[fach.length];
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < change_modul.length; i++) {
             change_modul[i] = new MyButton("Fachübersicht");
             change_modul[i].addActionListener(new ListenerGoToPage(fach[i].fachname));
 
@@ -252,5 +253,4 @@ public class OverviewPanel extends GridPanel {
         d = Math.round(d * expo) / expo;
         return String.format("%." + digits + "f", d);
     }
-
 }

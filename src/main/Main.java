@@ -24,7 +24,6 @@ public class Main {
         map.put("Realschule", real);
         map.put("Mittelschule", mittel);
 
-        GUI g = new GUI(map);
-        // g.update(); TODO
+        new GUI(map);
     }
 }

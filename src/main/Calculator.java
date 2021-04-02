@@ -49,7 +49,7 @@ public class Calculator {
                 etcs += m.etcs;
             }
         }
-        
+
         double note = weightETCS != 0 ? sum / weightETCS : 0.0;
         return new double[] { sum, note, etcs };
     }
