@@ -42,7 +42,7 @@ public class FachPanel extends GridPanel {
     @Override
     public void initButtons() {
         MyButton back = new MyButton("Zurück");
-        back.addActionListener(new ListenerGoToPage("Main"));
+        back.addActionListener(new ListenerGoToPage("Overview"));
         place(3, 0, back);
     }
 

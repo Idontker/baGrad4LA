@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Main {
 
-    public static final String path = "C:/Users/Karol/proj/baGrad4LA/config";
+    public static final String path = "/home/bakas/proj/baGrad4LA/config";
 
     public static void main(String[] args) {
 

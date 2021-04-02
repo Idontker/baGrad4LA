@@ -13,12 +13,13 @@ public class OverviewPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel label_fach1, label_fach2, label_ews;
-    private JLabel label_note, label_etcs;
-    private JLabel label_note1, label_note2, label_note3, label_etcs1, label_etcs2, label_etcs3;
+    private JLabel label_note, label_etcs, label_goalETCS;
 
-    private JLabel label_warning1, label_warning2;
-    private JLabel[] label_goalETCS;
+    private JLabel label_fachnamen[];
+    private JLabel label_fachnote[];
+    private JLabel label_fachetcs[];
+    private JLabel label_fachgoalETCS[];
+    private JLabel label_warning[];
 
     private JLabel label_total, label_total_note, label_total_etcs;
     private JLabel label_pred, label_pred_note;
@@ -37,68 +38,42 @@ public class OverviewPanel extends GridPanel {
 
         createLabels();
         placeLabels();
+
+        createFachPanels();
+
+        initButtons();
+
     }
 
     private void createLabels() {
-        label_fach1 = new JLabel(fach[0].fachname);
-        label_fach1.setVisible(true);
-
-        label_fach2 = new JLabel(fach[1].fachname);
-        label_fach2.setVisible(true);
-
-        label_ews = new JLabel(fach[2].fachname);
-        label_ews.setVisible(true);
-        // ===================================
-
         label_note = new JLabel("Teilnote");
-        label_note.setVisible(true);
-
-        label_note1 = new JLabel("Note 1");
-        label_note1.setVisible(true);
-        label_note2 = new JLabel("Note 2");
-        label_note2.setVisible(true);
-        label_note3 = new JLabel("Note 3");
-        label_note3.setVisible(true);
-
-        // ===================================
-
         label_etcs = new JLabel("ETCS bislang");
-        label_etcs.setVisible(true);
+        label_goalETCS = new JLabel("ETCS benötigt");
 
-        label_etcs1 = new JLabel("0 ECTS");
-        label_etcs2 = new JLabel("0 ECTS");
-        label_etcs3 = new JLabel("0 ECTS");
-        label_etcs1.setVisible(true);
-        label_etcs2.setVisible(true);
-        label_etcs3.setVisible(true);
+        label_fachnamen = new JLabel[fach.length];
+        label_fachnote = new JLabel[fach.length];
+        label_fachetcs = new JLabel[fach.length];
+        label_fachgoalETCS = new JLabel[fach.length];
+        label_warning = new JLabel[fach.length];
 
-        // ===================================
+        for (int i = 0; i < fach.length; i++) {
+            label_fachnamen[i] = new JLabel(fach[i].fachname);
+            label_fachnote[i] = new JLabel("Note " + i);
+            label_fachetcs[i] = new JLabel("ETCS " + i);
+            label_warning[i] = new JLabel("zu viele ETCS");
+            label_warning[i].setForeground(Color.red);
+            // label_warning[i].setVisible(true);
 
-        label_goalETCS = new JLabel[4];
-        label_goalETCS[0] = new JLabel("ETCS benötigt");
-        label_goalETCS[1] = new JLabel("70 ETCS");
-        label_goalETCS[2] = new JLabel("70 ETCS");
-        label_goalETCS[3] = new JLabel("41 ETCS");
-
-        for (int i = 0; i < label_goalETCS.length; i++) {
-            label_goalETCS[1].setVisible(true);
+            if (fach[i].fachname.equals("EWS")) {
+                label_fachgoalETCS[i] = new JLabel("30 ETCS");
+            } else {
+                label_fachgoalETCS[i] = new JLabel("70 ETCS");
+            }
         }
-
-        // ===================================
-
-        label_warning1 = new JLabel("zu viele ETCS");
-        label_warning2 = new JLabel("zu viele ETCS");
-        label_warning1.setForeground(Color.red);
-        label_warning2.setForeground(Color.red);
-
-        // ===================================
 
         label_total = new JLabel("Gesamt:");
         label_total_note = new JLabel("0.0");
         label_total_etcs = new JLabel("0 ETCS");
-        label_total.setVisible(true);
-        label_total_note.setVisible(true);
-        label_total_etcs.setVisible(true);
 
         // ===================================
 
@@ -111,23 +86,17 @@ public class OverviewPanel extends GridPanel {
     }
 
     private void placeLabels() {
-        place(1, 1, label_fach1);
-        place(1, 2, label_fach2);
-
-        place(1, 3, label_ews);
 
         place(2, 0, label_note);
-        place(2, 1, label_note1);
-        place(2, 2, label_note2);
-        place(2, 3, label_note3);
-
         place(3, 0, label_etcs);
-        place(3, 1, label_etcs1);
-        place(3, 2, label_etcs2);
-        place(3, 3, label_etcs3);
+        place(4, 0, label_goalETCS);
 
-        for (int i = 0; i < label_goalETCS.length; i++) {
-            place(4, i, label_goalETCS[i]);
+        for (int i = 0; i < fach.length; i++) {
+            place(1, i + 1, label_fachnamen[i]);
+            place(2, i + 1, label_fachnote[i]);
+            place(3, i + 1, label_fachetcs[i]);
+            place(4, i + 1, label_fachgoalETCS[i]);
+            place(5, i + 1, label_warning[i]);
         }
 
         place(0, 4, label_total);
@@ -136,9 +105,14 @@ public class OverviewPanel extends GridPanel {
 
         place(0, 5, label_pred);
         place(2, 5, label_pred_note);
+    }
 
-        place(5, 1, label_warning1);
-        place(5, 2, label_warning2);
+    private void createFachPanels() {
+        for (int i = 0; i < fach.length; i++) {
+            FachPanel fp = new FachPanel(fach[i]);
+            fp.initButtons();
+            ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fp);
+        }
     }
 
     @Override
@@ -147,16 +121,10 @@ public class OverviewPanel extends GridPanel {
 
         for (int i = 0; i < 2; i++) {
             change_modul[i] = new MyButton("Fachübersicht");
-            change_modul[0].addActionListener(new ListenerGoToPage(fach[0].fachname));
+            change_modul[i].addActionListener(new ListenerGoToPage(fach[i].fachname));
 
             place(6, i + 1, change_modul[i]);
         }
-        change_modul[1].addActionListener(new ListenerGoToPage(fach[1].fachname));
-
-        change_modul[2] = new MyButton("Fachübersicht");
-        change_modul[2].addActionListener(new ListenerGoToPage(""));
-        place(6, 3, change_modul[2]);
-
     }
 
 }

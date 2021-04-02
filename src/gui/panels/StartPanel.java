@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import gui.HintTextField;
 import gui.MyComboBox;
+import gui.buttons.ListenerGoToPage;
 import util.Fach;
 
 public class StartPanel extends GridPanel {
@@ -142,8 +143,12 @@ public class StartPanel extends GridPanel {
         Fach ews = fachmap.get("EWS");
 
         GridPanel overview = new OverviewPanel(fach1, fach2, ews);
+        ListenerGoToPage.PANEL_MAP.put("Overview",overview);
 
+        frame.setVisible(false);
         frame.showPanel(overview);
+        frame.setSize(1080, 480);
+        frame.setVisible(true);
     }
 
 }
