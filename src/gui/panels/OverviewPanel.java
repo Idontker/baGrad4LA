@@ -1,6 +1,7 @@
 package gui.panels;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JButton;
@@ -114,8 +115,14 @@ public class OverviewPanel extends GridPanel {
     private void createFachPanels() {
         fachPanel = new FachPanel[fach.length];
 
+        ArrayList<String> fachnamen = new ArrayList<String>();
+        for (Fach f : fach) {
+            fachnamen.add(f.fachname);
+        }
+
+
         for (int i = 0; i < fach.length; i++) {
-            fachPanel[i] = new FachPanel(fach[i]);
+            fachPanel[i] = new FachPanel(fach[i],fachnamen);
             fachPanel[i].initButtons();
             ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fachPanel[i]);
         }

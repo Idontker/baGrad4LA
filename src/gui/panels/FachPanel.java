@@ -1,5 +1,7 @@
 package gui.panels;
 
+import java.util.ArrayList;
+
 import javax.swing.JLabel;
 
 import gui.buttons.*;
@@ -10,13 +12,18 @@ import gui.*;
 public class FachPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
-
     private JLabel fachLabel, label_note, label_ETCS;
     private Fach fach;
+    private ArrayList<String> nebenfaecher;
 
-    public FachPanel(Fach fach) {
+
+    public FachPanel(Fach fach, ArrayList<String> fachnamen) {
         super(fach.getModulnamen().length + 1, 4);
         this.fach = fach;
+
+        this.nebenfaecher = new ArrayList<String>();
+        this.nebenfaecher.addAll(fachnamen);
+        this.nebenfaecher.remove(fach.fachname);
 
         initFirstRow();
         initModuls();
@@ -68,7 +75,7 @@ public class FachPanel extends GridPanel {
             // daszu Signatur von showIf ändern, sodass es eine Liste akzeptiert. 
             // und zu begin dieser init Methode eine Liste der Fächer erstellen
             // das aktuelle Fach muss nicht gelöscht werden, da es nicht schadet
-            if (modul.showIfNebenfachIs(fach.fachname)) {
+            if (modul.showIfNebenfachIs(nebenfaecher)) {
 
                 JLabel label = new JLabel(modul.name);
                 label.setVisible(true);

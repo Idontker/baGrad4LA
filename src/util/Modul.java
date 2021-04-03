@@ -39,6 +39,7 @@ public class Modul {
         if (idx >= s.length)
             return;
         initNebenfaecher(s[idx]);
+        System.out.println(name + "\tr: " + restricted_fach + "\tn: " + necessary_fach);
     }
 
     public Modul(double etcs, String name, double gewicht) {
@@ -65,29 +66,40 @@ public class Modul {
                 restricted_fach.add(s.substring(1));
                 break;
             case '+':
-                restricted_fach.add(s.substring(1));
+                necessary_fach.add(s.substring(1));
                 break;
             default:
             }
         }
     }
 
-    public boolean showIfNebenfachIs(String nebenfachname) {
+    public boolean showIfNebenfachIs(ArrayList<String> nebenfaecher) {
         boolean ret = true;
 
-        if (restricted_fach.size() > 0) {
-            ret = !restricted_fach.contains(nebenfachname);
+        if(necessary_fach.size() > 0){
+            int n = necessary_fach.size();
+            for(String necessary: necessary_fach){
+                if(nebenfaecher.contains(necessary)){
+                    n--;
+                }
+            }
+            return n == 0;
+        }
+
+        for (String restricted: restricted_fach) {
+            if(nebenfaecher.contains(restricted)){
+                return false;
+            }
         }
         // if (necessary_fach.size() > 0) {
 
         // }
-        System.out.println(ret + "\t" + name + "\t" + nebenfachname + "\t"+ restricted_fach);
         return ret;
     }
 
     @Override
     public String toString() {
-        return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name;
+        return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name ;
     }
 
     private boolean isDouble(String s) {
