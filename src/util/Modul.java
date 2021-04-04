@@ -7,12 +7,14 @@ public class Modul {
     public String name;
     public double etcs;
     public double gewicht;
+    public boolean forBA;
     public ArrayList<String> restricted_fach = new ArrayList<String>();
     public ArrayList<String> necessary_fach = new ArrayList<String>();
 
     public Modul(String loadedString, String divider) {
         // default value for gewicht:
         gewicht = 1.0;
+        forBA = false;
 
         String s[] = loadedString.split(divider);
         for (int i = 0; i < s.length; i++) {
@@ -39,7 +41,11 @@ public class Modul {
         if (idx >= s.length)
             return;
         initNebenfaecher(s[idx]);
-        System.out.println(name + "\tr: " + restricted_fach + "\tn: " + necessary_fach);
+        idx++;
+        if (idx >= s.length)
+            return;
+        forBA = s[idx].trim().equalsIgnoreCase("BA");
+        System.out.println(name + "\tr: " + restricted_fach + "\tn: " + necessary_fach + "\t\tba:" + forBA);
     }
 
     public Modul(double etcs, String name, double gewicht) {
@@ -59,6 +65,9 @@ public class Modul {
     }
 
     private void initNebenfaecher(String modifier) {
+        if (modifier.length() == 0)
+            return;
+
         for (String s : modifier.split(" ")) {
             char first = s.charAt(0);
             switch (first) {
@@ -76,30 +85,27 @@ public class Modul {
     public boolean showIfNebenfachIs(ArrayList<String> nebenfaecher) {
         boolean ret = true;
 
-        if(necessary_fach.size() > 0){
+        if (necessary_fach.size() > 0) {
             int n = necessary_fach.size();
-            for(String necessary: necessary_fach){
-                if(nebenfaecher.contains(necessary)){
+            for (String necessary : necessary_fach) {
+                if (nebenfaecher.contains(necessary)) {
                     n--;
                 }
             }
             return n == 0;
         }
 
-        for (String restricted: restricted_fach) {
-            if(nebenfaecher.contains(restricted)){
+        for (String restricted : restricted_fach) {
+            if (nebenfaecher.contains(restricted)) {
                 return false;
             }
         }
-        // if (necessary_fach.size() > 0) {
-
-        // }
         return ret;
     }
 
     @Override
     public String toString() {
-        return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name ;
+        return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name;
     }
 
     private boolean isDouble(String s) {
