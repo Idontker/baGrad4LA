@@ -2,10 +2,13 @@ package gui.panels;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import gui.buttons.ListenerGoToPage;
 import gui.buttons.MyButton;
@@ -28,10 +31,14 @@ public class OverviewPanel extends GridPanel {
     private JLabel label_total, label_total_note, label_total_etcs;
     private JLabel label_pred, label_pred_note;
 
-    private Fach fach[];
-    private FachPanel fachPanel[];
+    private JRadioButton radio_stex, radio_ba;
 
     private JButton[] change_modul;
+
+    private FachPanel fachPanel[];
+    private Fach fach[];
+
+    private boolean mode_ba;
 
     public OverviewPanel(Fach fach1, Fach fach2, Fach ews) {
         super(10, 7);
@@ -40,6 +47,8 @@ public class OverviewPanel extends GridPanel {
         fach[0] = fach1;
         fach[1] = fach2;
         fach[2] = ews;
+
+        mode_ba = true;
 
         createLabels();
         placeLabels();
@@ -69,11 +78,7 @@ public class OverviewPanel extends GridPanel {
             label_warning[i].setForeground(Color.red);
             label_warning[i].setVisible(false);
 
-            if (fach[i].fachname.equals("EWS")) {
-                label_fachgoalETCS[i] = new JLabel("30 ETCS");
-            } else {
-                label_fachgoalETCS[i] = new JLabel("70 ETCS");
-            }
+            label_fachgoalETCS[i] = new JLabel(fach[i].etcs_ba + " ETCS");
         }
 
         label_total = new JLabel("Gesamt:");
@@ -120,9 +125,8 @@ public class OverviewPanel extends GridPanel {
             fachnamen.add(f.fachname);
         }
 
-
         for (int i = 0; i < fach.length; i++) {
-            fachPanel[i] = new FachPanel(fach[i],fachnamen);
+            fachPanel[i] = new FachPanel(fach[i], fachnamen);
             fachPanel[i].initButtons();
             ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fachPanel[i]);
         }
@@ -138,9 +142,58 @@ public class OverviewPanel extends GridPanel {
 
             place(6, i + 1, change_modul[i]);
         }
+
+        initToggleButton();
     }
 
+    private void initToggleButton() {
+        radio_ba = new JRadioButton("BA-Rechner");
+        radio_stex = new JRadioButton("Stex-Rechner");
+        place(0, 0, radio_ba);
+        place(1, 0, radio_stex);
+
+        radio_ba.setSelected(mode_ba);
+        radio_stex.setSelected(!mode_ba);
+
+        radio_ba.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("BA pressed");
+                radio_stex.setSelected(false);
+                mode_ba = true;
+                update();
+            }
+        });
+
+        radio_stex.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Stex pressed");
+                radio_ba.setSelected(false);
+                mode_ba = false;
+                update();
+            }
+        });
+
+    }
+
+    // ============================================
+    // ============================================
+    // ============= Update stuff =================
+    // ============================================
+    // ============================================
+
     public void update() {
+
+        // 
+        for(int i = 0; i < label_fachgoalETCS.length; i++){
+            if(mode_ba){
+                label_fachgoalETCS[i].setText(fach[i].etcs_ba+" ETCS");
+            } else {
+                label_fachgoalETCS[i].setText(fach[i].etcs_stex+" ETCS");
+            }
+        }
+
         // ==============================
         // pull and update data from fachPanels
         // ==============================
@@ -201,12 +254,6 @@ public class OverviewPanel extends GridPanel {
         double tmp[] = Calculator.calcFach(fach);
         return new double[] { tmp[1], tmp[2] };
     }
-
-    // ============================================
-    // ============================================
-    // ============= Update stuff =================
-    // ============================================
-    // ============================================
 
     public void updateNote(double val, int fachnummer) {
         label_fachnote[fachnummer].setText(formatGrad(val));
