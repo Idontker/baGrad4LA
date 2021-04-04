@@ -50,17 +50,11 @@ public class Loader {
             if (line.length() == 0) {
                 // do Nothing
             } else if (line.charAt(0) == '#') {
-                fach = new Fach(line.substring(1).trim());
+                fach = new Fach(line.substring(1).trim(), " ");
                 faecher.put(fach.fachname, fach);
             } else {
-                // String s[] = line.split(":");
-                // if (s.length == 2 || s.length == 3) {
                 Modul m = new Modul(line, ":");
                 fach.module.add(m);
-                // fach.module.add(new Modul(Double.parseDouble(s[1].trim()), s[0].trim()));
-                // fach.module.add(new Modul(Double.parseDouble(s[1].trim()), s[0].trim(),
-                // Double.parseDouble(s[2].trim())));
-                // }
             }
         }
 
@@ -113,12 +107,10 @@ public class Loader {
             String line = sc.nextLine();
 
             if (line.charAt(0) == '#') {
-                fach = new Fach(line.substring(1).trim());
+                fach = new Fach(line.substring(1).trim(), " ");
                 map.put(fach.fachname, fach);
             } else {
                 Modul m = new Modul(line, ",");
-                // String s[] = line.split(",");
-                // Modul m = new Modul(Double.parseDouble(s[1].trim()), 0, s[0].trim());
                 fach.module.add(m);
             }
         }
