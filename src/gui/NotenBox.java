@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.event.*;
 
+import gui.buttons.ListenerGoToPage;
+import gui.panels.OverviewPanel;
 import util.Modul;
 
 public class NotenBox extends MyComboBox {
@@ -32,7 +34,8 @@ public class NotenBox extends MyComboBox {
 
                 modul.note = newValue;
 
-                GUI.gui.update();
+                OverviewPanel overview = (OverviewPanel) ListenerGoToPage.PANEL_MAP.get("Overview");
+                overview.update();
 
             }
 
