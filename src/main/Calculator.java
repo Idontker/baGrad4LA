@@ -7,35 +7,12 @@ public class Calculator {
 
     /**
      * 
-     * @param fach1
-     * @param fach2
-     * @param ews
-     * @return [note, hochrechnung]
-     */
-    public static double[] calcGrad(Fach fach1, Fach fach2, Fach ews) {
-        double[] addedFach1 = calcFach(fach1);
-        double[] addedFach2 = calcFach(fach2);
-        double[] addedEWS = calcFach(ews);
-
-        double notensumme = addedFach1[0] + addedFach2[0] + addedEWS[0];
-        double totaletcs = addedFach1[1] + addedFach2[1] + addedEWS[1];
-
-        // double predSum = (addedFach1[0] + addedFach2[0]) * FACH_ETCS + addedEWS[0] *
-        // EWS_ETCS;
-        // predSum /= (FACH_ETCS * 2 + EWS_ETCS);
-
-        double note = notensumme / totaletcs;
-
-        // return new double[] { note, predSum };
-        return new double[] { note, 0 };
-    }
-
-    /**
-     * 
      * @param fach
+     * @param mode_ba true if BA; false if Stex
      * @return [weighted sum, current grad, total etcs]
      */
-    public static double[] calcFach(Fach fach) {
+    public static double[] calcFach(Fach fach, boolean mode_ba) {
+
         if (fach == null) {
             return new double[] { 0, 0, 0, 0 };
         }

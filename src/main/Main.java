@@ -16,13 +16,13 @@ public class Main {
         Saver.construct(path);
 
         HashMap<String, Fach> gym = loader.loadFaecher("Gymnasium");
-        HashMap<String, Fach> real = loader.loadFaecher("Realschule");
-        HashMap<String, Fach> mittel = loader.loadFaecher("Mittelschule");
+        //HashMap<String, Fach> real = loader.loadFaecher("Realschule");
+        //HashMap<String, Fach> mittel = loader.loadFaecher("Mittelschule");
 
         HashMap<String, HashMap<String, Fach>> map = new HashMap<String, HashMap<String, Fach>>();
         map.put("Gymnasium", gym);
-        map.put("Realschule", real);
-        map.put("Mittelschule", mittel);
+        //map.put("Realschule", real);
+        //map.put("Mittelschule", mittel);
 
         new GUI(map);
     }

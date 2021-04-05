@@ -126,7 +126,7 @@ public class OverviewPanel extends GridPanel {
         }
 
         for (int i = 0; i < fach.length; i++) {
-            fachPanel[i] = new FachPanel(fach[i], fachnamen);
+            fachPanel[i] = new FachPanel(fach[i], fachnamen, mode_ba);
             fachPanel[i].initButtons();
             ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fachPanel[i]);
         }
@@ -161,7 +161,7 @@ public class OverviewPanel extends GridPanel {
                 System.out.println("BA pressed");
                 radio_stex.setSelected(false);
                 mode_ba = true;
-                update();
+                updateMode();
             }
         });
 
@@ -171,10 +171,9 @@ public class OverviewPanel extends GridPanel {
                 System.out.println("Stex pressed");
                 radio_ba.setSelected(false);
                 mode_ba = false;
-                update();
+                updateMode();
             }
         });
-
     }
 
     // ============================================
@@ -183,16 +182,22 @@ public class OverviewPanel extends GridPanel {
     // ============================================
     // ============================================
 
-    public void update() {
-
-        // 
-        for(int i = 0; i < label_fachgoalETCS.length; i++){
-            if(mode_ba){
-                label_fachgoalETCS[i].setText(fach[i].etcs_ba+" ETCS");
+    private void updateMode() {
+        //
+        for (int i = 0; i < label_fachgoalETCS.length; i++) {
+            if (mode_ba) {
+                label_fachgoalETCS[i].setText(fach[i].etcs_ba + " ETCS");
             } else {
-                label_fachgoalETCS[i].setText(fach[i].etcs_stex+" ETCS");
+                label_fachgoalETCS[i].setText(fach[i].etcs_stex + " ETCS");
             }
         }
+
+        for (int i = 0; i < fachPanel.length; i++) {
+            fachPanel[i].updateMode(mode_ba);
+        }
+    }
+
+    public void update() {
 
         // ==============================
         // pull and update data from fachPanels
@@ -214,7 +219,6 @@ public class OverviewPanel extends GridPanel {
 
             fachPanel[i].updateETCS(res[i][1]);
             fachPanel[i].updateNote(res[i][0]);
-
         }
 
         // ==============================
@@ -251,7 +255,7 @@ public class OverviewPanel extends GridPanel {
     }
 
     private double[] updateFach(Fach fach) {
-        double tmp[] = Calculator.calcFach(fach);
+        double tmp[] = Calculator.calcFach(fach, mode_ba);
         return new double[] { tmp[1], tmp[2] };
     }
 

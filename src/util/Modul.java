@@ -103,6 +103,10 @@ public class Modul {
         return ret;
     }
 
+    public boolean showIfMode(boolean isBaMode){
+        return (!isBaMode || forBA); 
+    }
+
     @Override
     public String toString() {
         return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name;

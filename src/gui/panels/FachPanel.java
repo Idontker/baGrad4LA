@@ -1,6 +1,7 @@
 package gui.panels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JLabel;
 
@@ -13,13 +14,17 @@ public class FachPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
     private JLabel fachLabel, label_note, label_ETCS;
+
+    private HashMap<Modul, ModulView> map_modulView;
+
     private Fach fach;
     private ArrayList<String> nebenfaecher;
+    private boolean mode_ba;
 
-
-    public FachPanel(Fach fach, ArrayList<String> fachnamen) {
+    public FachPanel(Fach fach, ArrayList<String> fachnamen, boolean mode_ba) {
         super(fach.getModulnamen().length + 1, 4);
         this.fach = fach;
+        this.mode_ba = mode_ba;
 
         this.nebenfaecher = new ArrayList<String>();
         this.nebenfaecher.addAll(fachnamen);
@@ -68,23 +73,52 @@ public class FachPanel extends GridPanel {
     }
 
     private void initModuls() {
+        map_modulView = new HashMap<Modul, ModulView>();
+
         for (int i = 0; i < fach.module.size(); i++) {
             Modul modul = fach.module.get(i);
 
-            //TODO: hier muss das Nebenfach auch wirklich übergeben werden
-            // daszu Signatur von showIf ändern, sodass es eine Liste akzeptiert. 
-            // und zu begin dieser init Methode eine Liste der Fächer erstellen
-            // das aktuelle Fach muss nicht gelöscht werden, da es nicht schadet
             if (modul.showIfNebenfachIs(nebenfaecher)) {
 
-                JLabel label = new JLabel(modul.name);
-                label.setVisible(true);
+                boolean visible = modul.showIfMode(mode_ba);
+                ModulView view = new ModulView(modul, visible);
 
-                NotenBox cb = new NotenBox(modul);
+                map_modulView.put(modul, view);
 
-                place(1, i + 1, label);
-                place(2, i + 1, cb);
+                place(1, i + 1, view.label_modul);
+                place(2, i + 1, view.nb_modul);
             }
         }
+    }
+
+    public void updateMode(boolean mode_ba) {
+        this.mode_ba = mode_ba;
+
+        for (int i = 0; i < fach.module.size(); i++) {
+            for (Modul modul : fach.module) {
+                ModulView view = map_modulView.get(modul);
+                // System.out.println(mode_ba + "\t" + modul.showIfMode(mode_ba) + "\t" + modul.name);
+                if (view != null) {
+                    view.setVisible(modul.showIfMode(mode_ba));
+                }
+            }
+        }
+    }
+}
+
+class ModulView {
+    JLabel label_modul;
+    NotenBox nb_modul;
+
+    public ModulView(Modul modul, boolean visible) {
+        label_modul = new JLabel(modul.name);
+        nb_modul = new NotenBox(modul);
+
+        setVisible(visible);
+    }
+
+    void setVisible(boolean visible) {
+        label_modul.setVisible(visible);
+        nb_modul.setVisible(visible);
     }
 }
