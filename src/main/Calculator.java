@@ -20,7 +20,7 @@ public class Calculator {
         double sum = 0.0, etcs = 0.0, weightETCS = 0.0;
 
         for (Modul m : fach.module) {
-            if (Math.abs(m.note) > 0.001) {
+            if (m.showIfMode(mode_ba) && Math.abs(m.note) > 0.001) {
                 sum += m.note * m.etcs * m.gewicht;
                 weightETCS += m.etcs * m.gewicht;
                 etcs += m.etcs;

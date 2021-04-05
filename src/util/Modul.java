@@ -45,7 +45,6 @@ public class Modul {
         if (idx >= s.length)
             return;
         forBA = s[idx].trim().equalsIgnoreCase("BA");
-        System.out.println(name + "\tr: " + restricted_fach + "\tn: " + necessary_fach + "\t\tba:" + forBA);
     }
 
     public Modul(double etcs, String name, double gewicht) {
@@ -103,8 +102,8 @@ public class Modul {
         return ret;
     }
 
-    public boolean showIfMode(boolean isBaMode){
-        return (!isBaMode || forBA); 
+    public boolean showIfMode(boolean isBaMode) {
+        return (!isBaMode || forBA);
     }
 
     @Override

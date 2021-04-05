@@ -40,13 +40,10 @@ public class OverviewPanel extends GridPanel {
 
     private boolean mode_ba;
 
-    public OverviewPanel(Fach fach1, Fach fach2, Fach ews) {
+    public OverviewPanel(Fach[] fach) {
         super(10, 7);
 
-        fach = new Fach[3];
-        fach[0] = fach1;
-        fach[1] = fach2;
-        fach[2] = ews;
+        this.fach = fach;
 
         mode_ba = true;
 
@@ -101,20 +98,23 @@ public class OverviewPanel extends GridPanel {
         place(3, 0, label_etcs);
         place(4, 0, label_goalETCS);
 
-        for (int i = 0; i < fach.length; i++) {
+        int i = 0;
+        for (; i < fach.length; i++) {
             place(1, i + 1, label_fachnamen[i]);
             place(2, i + 1, label_fachnote[i]);
             place(3, i + 1, label_fachetcs[i]);
             place(4, i + 1, label_fachgoalETCS[i]);
             place(5, i + 1, label_warning[i]);
         }
+        i++;
 
-        place(0, 4, label_total);
-        place(2, 4, label_total_note);
-        place(3, 4, label_total_etcs);
+        place(0, i, label_total);
+        place(2, i, label_total_note);
+        place(3, i, label_total_etcs);
+        i++;
 
-        place(0, 5, label_pred);
-        place(2, 5, label_pred_note);
+        place(0, i, label_pred);
+        place(2, i, label_pred_note);
     }
 
     private void createFachPanels() {
@@ -158,7 +158,6 @@ public class OverviewPanel extends GridPanel {
         radio_ba.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("BA pressed");
                 radio_stex.setSelected(false);
                 mode_ba = true;
                 updateMode();
@@ -168,7 +167,6 @@ public class OverviewPanel extends GridPanel {
         radio_stex.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Stex pressed");
                 radio_ba.setSelected(false);
                 mode_ba = false;
                 updateMode();
@@ -195,6 +193,8 @@ public class OverviewPanel extends GridPanel {
         for (int i = 0; i < fachPanel.length; i++) {
             fachPanel[i].updateMode(mode_ba);
         }
+
+        update();
     }
 
     public void update() {
@@ -213,7 +213,7 @@ public class OverviewPanel extends GridPanel {
         // update Panels with new data
         // ==============================
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < fach.length; i++) {
             this.updateNote(res[i][0], i);
             this.updateETCS(res[i][1], i);
 
@@ -228,7 +228,7 @@ public class OverviewPanel extends GridPanel {
         double total_etcs = 0.0;
         double total_note = 0.0;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < fach.length; i++) {
             total_etcs += res[i][1];
             total_note += res[i][0] * res[i][1];
         }

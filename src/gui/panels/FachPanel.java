@@ -97,7 +97,6 @@ public class FachPanel extends GridPanel {
         for (int i = 0; i < fach.module.size(); i++) {
             for (Modul modul : fach.module) {
                 ModulView view = map_modulView.get(modul);
-                // System.out.println(mode_ba + "\t" + modul.showIfMode(mode_ba) + "\t" + modul.name);
                 if (view != null) {
                     view.setVisible(modul.showIfMode(mode_ba));
                 }

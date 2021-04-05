@@ -116,7 +116,7 @@ public class StartPanel extends GridPanel {
             Collection<Fach> tmp = map.get(schulart).values();
             ArrayList<String> faecherliste = new ArrayList<String>();
             for (Fach fach : tmp) {
-                if (fach.fachname.equalsIgnoreCase("EWS") == false) {
+                if (fach.fachname.equalsIgnoreCase("EWS") == false && fach.fachname.equalsIgnoreCase("Didaktik+Weiteres") == false) {
                     faecherliste.add(fach.fachname);
                 }
             }
@@ -138,11 +138,13 @@ public class StartPanel extends GridPanel {
         String f1 = (String) cb_fach1.getSelectedItem();
         String f2 = (String) cb_fach2.getSelectedItem();
 
-        Fach fach1 = fachmap.get(f1);
-        Fach fach2 = fachmap.get(f2);
-        Fach ews = fachmap.get("EWS");
+        Fach fach[] = new Fach[4];
+        fach[0] = fachmap.get(f1);
+        fach[1] = fachmap.get(f2);
+        fach[2] = fachmap.get("EWS");
+        fach[3] = fachmap.get("Didaktik+Weiteres");
 
-        GridPanel overview = new OverviewPanel(fach1, fach2, ews);
+        GridPanel overview = new OverviewPanel(fach);
         ListenerGoToPage.PANEL_MAP.put("Overview",overview);
 
         frame.setVisible(false);
