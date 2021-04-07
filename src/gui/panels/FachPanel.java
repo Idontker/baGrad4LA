@@ -13,7 +13,7 @@ import gui.*;
 public class FachPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
-    private JLabel fachLabel, label_note, label_ETCS;
+    private JLabel fachLabel, label_note, label_ECTS;
 
     private HashMap<Modul, ModulView> map_modulView;
 
@@ -42,11 +42,11 @@ public class FachPanel extends GridPanel {
         label_note.setText("Note: " + s);
     }
 
-    public void updateETCS(double d) {
+    public void updateECTS(double d) {
         double val = Math.round(d * 10) / 10.0;
         String s = String.format("%.1f", val);
 
-        label_ETCS.setText("ETCS: " + s);
+        label_ECTS.setText("ECTS: " + s);
     }
 
     // ================ INIT =============
@@ -61,15 +61,15 @@ public class FachPanel extends GridPanel {
     private void initFirstRow() {
         fachLabel = new JLabel(fach.fachname);
         label_note = new JLabel("Note: 0.0");
-        label_ETCS = new JLabel("ETCS: 0.0");
+        label_ECTS = new JLabel("ECTS: 0.0");
 
         fachLabel.setVisible(true);
         label_note.setVisible(true);
-        label_ETCS.setVisible(true);
+        label_ECTS.setVisible(true);
 
         place(0, 0, fachLabel);
         place(1, 0, label_note);
-        place(2, 0, label_ETCS);
+        place(2, 0, label_ECTS);
     }
 
     private void initModuls() {

@@ -20,15 +20,15 @@ public class OverviewPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel label_note, label_etcs, label_goalETCS;
+    private JLabel label_note, label_ects, label_goalECTS;
 
     private JLabel label_fachnamen[];
     private JLabel label_fachnote[];
-    private JLabel label_fachetcs[];
-    private JLabel label_fachgoalETCS[];
+    private JLabel label_fachects[];
+    private JLabel label_fachgoalECTS[];
     private JLabel label_warning[];
 
-    private JLabel label_total, label_total_note, label_total_etcs;
+    private JLabel label_total, label_total_note, label_total_ects;
     private JLabel label_pred, label_pred_note;
 
     private JRadioButton radio_stex, radio_ba;
@@ -58,29 +58,29 @@ public class OverviewPanel extends GridPanel {
 
     private void createLabels() {
         label_note = new JLabel("Teilnote");
-        label_etcs = new JLabel("ETCS bislang");
-        label_goalETCS = new JLabel("ETCS benötigt");
+        label_ects = new JLabel("ECTS bislang");
+        label_goalECTS = new JLabel("ECTS benötigt");
 
         label_fachnamen = new JLabel[fach.length];
         label_fachnote = new JLabel[fach.length];
-        label_fachetcs = new JLabel[fach.length];
-        label_fachgoalETCS = new JLabel[fach.length];
+        label_fachects = new JLabel[fach.length];
+        label_fachgoalECTS = new JLabel[fach.length];
         label_warning = new JLabel[fach.length];
 
         for (int i = 0; i < fach.length; i++) {
             label_fachnamen[i] = new JLabel(fach[i].fachname);
             label_fachnote[i] = new JLabel("Note " + i);
-            label_fachetcs[i] = new JLabel("ETCS " + i);
-            label_warning[i] = new JLabel("zu viele ETCS");
+            label_fachects[i] = new JLabel("ECTS " + i);
+            label_warning[i] = new JLabel("zu viele ECTS");
             label_warning[i].setForeground(Color.red);
             label_warning[i].setVisible(false);
 
-            label_fachgoalETCS[i] = new JLabel(fach[i].etcs_ba + " ETCS");
+            label_fachgoalECTS[i] = new JLabel(fach[i].ects_ba + " ECTS");
         }
 
         label_total = new JLabel("Gesamt:");
         label_total_note = new JLabel("0.0");
-        label_total_etcs = new JLabel("0 ETCS");
+        label_total_ects = new JLabel("0 ECTS");
 
         // ===================================
 
@@ -95,22 +95,22 @@ public class OverviewPanel extends GridPanel {
     private void placeLabels() {
 
         place(2, 0, label_note);
-        place(3, 0, label_etcs);
-        place(4, 0, label_goalETCS);
+        place(3, 0, label_ects);
+        place(4, 0, label_goalECTS);
 
         int i = 0;
         for (; i < fach.length; i++) {
             place(1, i + 1, label_fachnamen[i]);
             place(2, i + 1, label_fachnote[i]);
-            place(3, i + 1, label_fachetcs[i]);
-            place(4, i + 1, label_fachgoalETCS[i]);
+            place(3, i + 1, label_fachects[i]);
+            place(4, i + 1, label_fachgoalECTS[i]);
             place(5, i + 1, label_warning[i]);
         }
         i++;
 
         place(0, i, label_total);
         place(2, i, label_total_note);
-        place(3, i, label_total_etcs);
+        place(3, i, label_total_ects);
         i++;
 
         place(0, i, label_pred);
@@ -190,11 +190,11 @@ public class OverviewPanel extends GridPanel {
 
     private void updateMode() {
         //
-        for (int i = 0; i < label_fachgoalETCS.length; i++) {
+        for (int i = 0; i < label_fachgoalECTS.length; i++) {
             if (mode_ba) {
-                label_fachgoalETCS[i].setText(fach[i].etcs_ba + " ETCS");
+                label_fachgoalECTS[i].setText(fach[i].ects_ba + " ECTS");
             } else {
-                label_fachgoalETCS[i].setText(fach[i].etcs_stex + " ETCS");
+                label_fachgoalECTS[i].setText(fach[i].ects_stex + " ECTS");
             }
         }
 
@@ -223,9 +223,9 @@ public class OverviewPanel extends GridPanel {
 
         for (int i = 0; i < fach.length; i++) {
             this.updateNote(res[i][0], i);
-            this.updateETCS(res[i][1], i);
+            this.updateECTS(res[i][1], i);
 
-            fachPanel[i].updateETCS(res[i][1]);
+            fachPanel[i].updateECTS(res[i][1]);
             fachPanel[i].updateNote(res[i][0]);
         }
 
@@ -233,16 +233,16 @@ public class OverviewPanel extends GridPanel {
         // update totals
         // ==============================
 
-        double total_etcs = 0.0;
+        double total_ects = 0.0;
         double total_note = 0.0;
 
         for (int i = 0; i < fach.length; i++) {
-            total_etcs += res[i][1];
+            total_ects += res[i][1];
             total_note += res[i][0] * res[i][1];
         }
-        total_note = Math.abs(total_etcs) > 0.0001 ? total_note / total_etcs : 0.0;
+        total_note = Math.abs(total_ects) > 0.0001 ? total_note / total_ects : 0.0;
 
-        this.updateTotal(total_note, total_etcs);
+        this.updateTotal(total_note, total_ects);
 
         // ==============================
         // update pred
@@ -271,8 +271,8 @@ public class OverviewPanel extends GridPanel {
         label_fachnote[fachnummer].setText(formatGrad(val));
     }
 
-    public void updateETCS(double val, int fachnummer) {
-        label_fachetcs[fachnummer].setText(formatETCS(val));
+    public void updateECTS(double val, int fachnummer) {
+        label_fachects[fachnummer].setText(formatECTS(val));
 
         if (label_warning[fachnummer] != null) {
             if (val > 70.001) {
@@ -283,13 +283,13 @@ public class OverviewPanel extends GridPanel {
         }
     }
 
-    public void updateTotal(double note, double etcs) {
+    public void updateTotal(double note, double ects) {
         String s = formatGrad(note);
         label_total_note.setText(s);
 
-        s = formatETCS(etcs);
+        s = formatECTS(ects);
 
-        label_total_etcs.setText(s + " ETCS");
+        label_total_ects.setText(s + " ECTS");
     }
 
     public void updatePred(double pred) {
@@ -310,7 +310,7 @@ public class OverviewPanel extends GridPanel {
         return roundedDoubleAsString(2, d);
     }
 
-    private String formatETCS(double d) {
+    private String formatECTS(double d) {
         return roundedDoubleAsString(1, d);
     }
 
