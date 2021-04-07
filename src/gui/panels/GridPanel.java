@@ -5,10 +5,13 @@ import java.awt.*;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import gui.MainFrame;
+
 public abstract class GridPanel extends JPanel {
 
     protected static final long serialVersionUID = 1L;
     protected JPanel[][] panels;
+    protected MainFrame frame;
 
     public GridPanel(int rows, int cels) {
         this.setLayout(new GridLayout(rows, cels));
@@ -30,6 +33,9 @@ public abstract class GridPanel extends JPanel {
         panels[y][x].remove(c);
     }
 
+    public abstract void initButtons();
 
-    public abstract void initButtons(); 
+    public void setFrame(MainFrame frame) {
+        this.frame = frame;
+    }
 }
