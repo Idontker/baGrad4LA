@@ -36,8 +36,6 @@ public abstract class GridPanel extends JPanel {
         panels[y][x].remove(c);
     }
 
-    public abstract void initButtons();
-
     public void setFrame(MainFrame frame) {
         this.frame = frame;
     }

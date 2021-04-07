@@ -104,8 +104,7 @@ public class StartPanel extends GridPanel {
         place(1, 4, cb_fach2);
     }
 
-    @Override
-    public void initButtons() {
+    private void initButtons() {
         button_weiter = new JButton("Weiter");
         button_weiter.setVisible(false);
 

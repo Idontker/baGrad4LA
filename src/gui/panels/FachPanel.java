@@ -32,7 +32,7 @@ public class FachPanel extends GridPanel {
 
         initFirstRow();
         initModuls();
-
+        initButtons();
     }
 
     public void updateNote(double d) {
@@ -51,8 +51,7 @@ public class FachPanel extends GridPanel {
 
     // ================ INIT =============
 
-    @Override
-    public void initButtons() {
+    private void initButtons() {
         MyButton back = new MyButton("Zurück");
         back.addActionListener(new ListenerGoToPage("Overview"));
         place(3, 0, back);
