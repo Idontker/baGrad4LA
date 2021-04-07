@@ -158,18 +158,26 @@ public class OverviewPanel extends GridPanel {
         radio_ba.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                radio_stex.setSelected(false);
-                mode_ba = true;
-                updateMode();
+                if (radio_ba.isSelected() == false) {
+                    radio_ba.setSelected(true);
+                } else {
+                    radio_stex.setSelected(false);
+                    mode_ba = true;
+                    updateMode();
+                }
             }
         });
 
         radio_stex.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                radio_ba.setSelected(false);
-                mode_ba = false;
-                updateMode();
+                if (radio_stex.isSelected() == false) {
+                    radio_stex.setSelected(true);
+                } else {
+                    radio_ba.setSelected(false);
+                    mode_ba = false;
+                    updateMode();
+                }
             }
         });
     }
