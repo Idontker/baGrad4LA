@@ -38,6 +38,7 @@ public class ListenerGoToPage implements ActionListener {
             System.err.println("Subject not found: " + next);
         } else {
             frame.showPanel(panel);
+            frame.setSize(frame.getWidth(), panel.rows * 40);
         }
     }
 

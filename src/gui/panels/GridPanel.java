@@ -13,8 +13,11 @@ public abstract class GridPanel extends JPanel {
     protected JPanel[][] panels;
     protected MainFrame frame;
 
+    public int rows;
+
     public GridPanel(int rows, int cels) {
         this.setLayout(new GridLayout(rows, cels));
+        this.rows = rows;
 
         panels = new JPanel[rows][cels];
         for (int i = 0; i < rows; i++) {

@@ -2,6 +2,8 @@ package gui.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,8 +11,10 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import gui.HintTextField;
 import gui.MyComboBox;
@@ -21,7 +25,7 @@ public class StartPanel extends GridPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private JLabel label_name, label_fach1, label_fach2, label_schulart;
+    private JLabel label_name, label_fach1, label_fach2, label_schulart, label_warning;
     private MyComboBox cb_schulart, cb_fach1, cb_fach2;
     private JTextField textField_name;
     private JButton button_weiter;
@@ -45,16 +49,16 @@ public class StartPanel extends GridPanel {
         label_schulart = new JLabel("Schulart:");
         label_fach1 = new JLabel("1. Fach:");
         label_fach2 = new JLabel("2. Fach:");
+        label_warning = new JLabel("Achtung: 2 gleiche Fächer! ");
+        label_warning.setForeground(Color.red);
 
-        label_name.setVisible(true);
-        label_schulart.setVisible(true);
-        label_fach1.setVisible(true);
-        label_fach2.setVisible(true);
+        label_warning.setVisible(false);
 
         place(0, 1, label_name);
         place(0, 2, label_schulart);
         place(0, 3, label_fach1);
         place(0, 4, label_fach2);
+        place(0, 5, label_warning);
     }
 
     private void initInputs() {
@@ -79,6 +83,21 @@ public class StartPanel extends GridPanel {
         cb_fach1.setVisible(false);
         cb_fach2.setVisible(false);
 
+        ActionListener listenForDuplicate = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cb_fach1.getSelectedItem().equals(cb_fach2.getSelectedItem())) {
+                    label_warning.setVisible(true);
+                } else {
+                    label_warning.setVisible(false);
+                }
+
+            }
+        };
+
+        cb_fach1.addActionListener(listenForDuplicate);
+        cb_fach2.addActionListener(listenForDuplicate);
+
         place(1, 1, textField_name);
         place(1, 2, cb_schulart);
         place(1, 3, cb_fach1);
@@ -89,9 +108,15 @@ public class StartPanel extends GridPanel {
     public void initButtons() {
         button_weiter = new JButton("Weiter");
         button_weiter.setVisible(false);
+
         button_weiter.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                goToOverview();
+                if (cb_fach1.getSelectedItem().equals(cb_fach2.getSelectedItem())) {
+                    shakeComp(button_weiter);
+                    shakeComp(label_warning);
+                } else {
+                    goToOverview();
+                }
             }
         });
 
@@ -116,7 +141,8 @@ public class StartPanel extends GridPanel {
             Collection<Fach> tmp = map.get(schulart).values();
             ArrayList<String> faecherliste = new ArrayList<String>();
             for (Fach fach : tmp) {
-                if (fach.fachname.equalsIgnoreCase("EWS") == false && fach.fachname.equalsIgnoreCase("Didaktik+Weiteres") == false) {
+                if (fach.fachname.equalsIgnoreCase("EWS") == false
+                        && fach.fachname.equalsIgnoreCase("Didaktik+Weiteres") == false) {
                     faecherliste.add(fach.fachname);
                 }
             }
@@ -145,12 +171,47 @@ public class StartPanel extends GridPanel {
         fach[3] = fachmap.get("Didaktik+Weiteres");
 
         GridPanel overview = new OverviewPanel(fach);
-        ListenerGoToPage.PANEL_MAP.put("Overview",overview);
+        ListenerGoToPage.PANEL_MAP.put("Overview", overview);
 
         frame.setVisible(false);
         frame.showPanel(overview);
-        frame.setSize(1080, 480);
+        frame.setSize(1280, frame.getHeight());
         frame.setVisible(true);
+    }
+
+    private void shakeComp(JComponent comp) {
+        final Point point = comp.getLocation();
+        final int delay = 25;
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 5; i++) {
+                    try {
+                        moveComp(new Point(point.x + 5, point.y), comp);
+                        Thread.sleep(delay);
+                        moveComp(point, comp);
+                        Thread.sleep(delay);
+                        moveComp(new Point(point.x - 5, point.y), comp);
+                        Thread.sleep(delay);
+                        moveComp(point, comp);
+                        Thread.sleep(delay);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        };
+        Thread t = new Thread(r);
+        t.start();
+    }
+
+    private void moveComp(final Point p, JComponent comp) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                comp.setLocation(p);
+            }
+        });
     }
 
 }

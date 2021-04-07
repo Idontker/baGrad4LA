@@ -9,7 +9,7 @@ public class Calculator {
      * 
      * @param fach
      * @param mode_ba true if BA; false if Stex
-     * @return [weighted sum, current grad, total etcs]
+     * @return [weighted sum, current grad, total ects]
      */
     public static double[] calcFach(Fach fach, boolean mode_ba) {
 
@@ -17,17 +17,17 @@ public class Calculator {
             return new double[] { 0, 0, 0, 0 };
         }
 
-        double sum = 0.0, etcs = 0.0, weightETCS = 0.0;
+        double sum = 0.0, ects = 0.0, weightECTS = 0.0;
 
         for (Modul m : fach.module) {
             if (m.showIfMode(mode_ba) && Math.abs(m.note) > 0.001) {
-                sum += m.note * m.etcs * m.gewicht;
-                weightETCS += m.etcs * m.gewicht;
-                etcs += m.etcs;
+                sum += m.note * m.ects * m.gewicht;
+                weightECTS += m.ects * m.gewicht;
+                ects += m.ects;
             }
         }
 
-        double note = weightETCS != 0 ? sum / weightETCS : 0.0;
-        return new double[] { sum, note, etcs };
+        double note = weightECTS != 0 ? sum / weightECTS : 0.0;
+        return new double[] { sum, note, ects };
     }
 }
