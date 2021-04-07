@@ -4,13 +4,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
 public class Saver {
 
     private static Saver s;
+    private static Fach[] def_facher;
 
-    public static void save(Fach[] fach) {
-        s.saveFaecher(fach);
+    public static void setFaecher(ArrayList<Fach> loaded_defaults) {
+        def_facher = loaded_defaults.toArray(new Fach[loaded_defaults.size()]);
+    }
+
+    public static void save() {
+        s.saveFaecher(def_facher);
     }
 
     public static void construct() {

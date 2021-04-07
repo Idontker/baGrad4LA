@@ -259,7 +259,7 @@ public class OverviewPanel extends GridPanel {
         // Save updates
         // ==============================
 
-        Saver.save(fach);
+        Saver.save();
     }
 
     private double[] updateFach(Fach fach) {
