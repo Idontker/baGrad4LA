@@ -130,6 +130,6 @@ public class Loader {
 
     private Scanner opeFileScanner(String pathToFile) throws FileNotFoundException {
         File f = new File(pathToFile);
-        return new Scanner(f);
+        return new Scanner(f, "utf-8");
     }
 }

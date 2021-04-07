@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Modul {
     public double note;
     public String name;
-    public double etcs;
+    public double ects;
     public double gewicht;
     public boolean forBA;
     public ArrayList<String> restricted_fach = new ArrayList<String>();
@@ -32,7 +32,7 @@ public class Modul {
 
         if (idx >= s.length)
             return;
-        this.etcs = Double.parseDouble(s[idx]);
+        this.ects = Double.parseDouble(s[idx]);
         idx++;
         if (idx >= s.length)
             return;
@@ -47,18 +47,18 @@ public class Modul {
         forBA = s[idx].trim().equalsIgnoreCase("BA");
     }
 
-    public Modul(double etcs, String name, double gewicht) {
-        this(0.0, etcs, name);
+    public Modul(double ects, String name, double gewicht) {
+        this(0.0, ects, name);
         this.gewicht = gewicht;
     }
 
-    public Modul(double etcs, String name) {
-        this(0.0, etcs, name);
+    public Modul(double ects, String name) {
+        this(0.0, ects, name);
     }
 
-    public Modul(double note, double etcs, String name) {
+    public Modul(double note, double ects, String name) {
         this.note = note;
-        this.etcs = etcs;
+        this.ects = ects;
         this.name = name;
         gewicht = 1.0;
     }
@@ -108,7 +108,7 @@ public class Modul {
 
     @Override
     public String toString() {
-        return note + " * " + gewicht + "\t" + etcs + " ETCS" + "\t" + name;
+        return note + " * " + gewicht + "\t" + ects + " ECTS" + "\t" + name;
     }
 
     private boolean isDouble(String s) {

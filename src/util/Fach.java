@@ -6,14 +6,14 @@ public class Fach {
 
     public String fachname;
     public ArrayList<Modul> module;
-    public double etcs_ba;
-    public double etcs_stex;
+    public double ects_ba;
+    public double ects_stex;
 
     public Fach(String inputline, String splitter) {
         // defauls and init
         module = new ArrayList<Modul>();
-        etcs_ba = 0.0;
-        etcs_stex = 0.0;
+        ects_ba = 0.0;
+        ects_stex = 0.0;
 
         // read input
         String s[] = inputline.split(splitter);
@@ -21,10 +21,10 @@ public class Fach {
         this.fachname = s[0];
         if (s.length == 1)
             return;
-        this.etcs_ba = Double.parseDouble(s[1]);
+        this.ects_ba = Double.parseDouble(s[1]);
         if (s.length == 2)
             return;
-        this.etcs_stex = Double.parseDouble(s[2]);
+        this.ects_stex = Double.parseDouble(s[2]);
     }
 
     public String[] getModulnamen() {
