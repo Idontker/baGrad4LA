@@ -1,8 +1,12 @@
 package util;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -53,13 +57,13 @@ public class Saver {
 
     public void saveFaecher(Fach[] faecher) {
         try {
-            File file = createSaveFile();
-            FileWriter writer = new FileWriter(file);
+            OutputStreamWriter out = getOutputStreamWriter();
+            BufferedWriter writer = new BufferedWriter(out);
 
             for (Fach fach : faecher) {
                 writeFach(writer, fach);
+                writer.flush();
             }
-
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +72,7 @@ public class Saver {
         endOfTransaction();
     }
 
-    private void writeFach(FileWriter writer, Fach fach) throws IOException {
+    private void writeFach(BufferedWriter writer, Fach fach) throws IOException {
         String header = "#" + fach.fachname;
         boolean first = true;
 
@@ -81,6 +85,13 @@ public class Saver {
                 writer.append(m.note + "," + m.name + "\n");
             }
         }
+    }
+
+    private OutputStreamWriter getOutputStreamWriter() throws FileNotFoundException, UnsupportedEncodingException {
+        File file = createSaveFile();
+        FileOutputStream fileStream = new FileOutputStream( file.getAbsolutePath());
+        OutputStreamWriter out = new OutputStreamWriter(fileStream, "UTF-8");
+        return out;
     }
 
     private File createSaveFile() {
