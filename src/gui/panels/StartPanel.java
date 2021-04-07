@@ -149,7 +149,7 @@ public class StartPanel extends GridPanel {
 
         frame.setVisible(false);
         frame.showPanel(overview);
-        frame.setSize(1080, 480);
+        frame.setSize(1080, frame.getHeight());
         frame.setVisible(true);
     }
 
