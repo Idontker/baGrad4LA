@@ -54,4 +54,12 @@ public class MyComboBox extends JComboBox<String> {
         }
     }
 
+    public void printOptions(String prefix) {
+        int size = this.getItemCount();
+        for (int i = 0; i < size; i++) {
+            String item = this.getItemAt(i);
+            System.out.println(prefix + ": Item at " + i + " = " + item);
+        }
+    }
+
 }
