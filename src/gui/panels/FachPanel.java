@@ -2,7 +2,7 @@ package gui.panels;
 
 import java.util.ArrayList;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -17,7 +17,7 @@ import gui.*;
 public class FachPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int cols = 5;
+    private static final int cols = 4;
 
     private JLabel fachLabel, label_note, label_ECTS, label_using;
     private MyButton back;
@@ -81,9 +81,13 @@ public class FachPanel extends JPanel {
 
         firstRow.place(0, 0, fachLabel);
         firstRow.place(1, 0, label_note);
-        firstRow.place(2, 0, label_ECTS);
-        firstRow.place(3, 0, label_using);
-        firstRow.place(4, 0, back);
+
+        JPanel cell = firstRow.panels[0][2];
+        cell.setLayout(new BorderLayout());
+        cell.add(label_using, BorderLayout.EAST);
+        cell.add(label_ECTS, BorderLayout.WEST);
+
+        firstRow.place(3, 0, back);
     }
 
     private void initModuls() {
@@ -156,18 +160,24 @@ class ModulView {
         label_modul = new JLabel(modul.name);
         label_ects = new JLabel(modul.ects + " ECTS");
         nb_modul = new NotenBox(modul);
-        
-        if(modul.pflicht){
+
+        if (modul.pflicht) {
             using = new JLabel("Pflicht");
         } else {
-            using = new JCheckBox();
+            using = new JCheckBox("");
         }
     }
 
     public void placeOn(GridPanel panel, int row) {
         panel.place(0, row, this.label_modul);
         panel.place(1, row, this.nb_modul);
-        panel.place(2, row, label_ects);
-        panel.place(3, row, using);
+
+        JPanel cell = panel.panels[row][2];
+        cell.setLayout(new BorderLayout());
+
+        cell.add(using, BorderLayout.EAST);
+        cell.add(label_ects, BorderLayout.WEST);
+
+        // panel.place(2, row, cell);
     }
 }
