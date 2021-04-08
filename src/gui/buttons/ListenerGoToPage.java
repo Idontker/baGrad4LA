@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
 import gui.*;
 import gui.panels.*;
@@ -15,7 +16,7 @@ public class ListenerGoToPage implements ActionListener {
     private MainFrame frame;
     private JComboBox<String> combo;
 
-    public static HashMap<String, GridPanel> PANEL_MAP = new HashMap<String, GridPanel>();
+    public static HashMap<String, JPanel> PANEL_MAP = new HashMap<String, JPanel>();
 
     public ListenerGoToPage(JComboBox<String> combo) {
         this.goTo = null;
@@ -32,13 +33,18 @@ public class ListenerGoToPage implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent arg0) {
         String next = getGoToName();
-        GridPanel panel = PANEL_MAP.get(next);
+        JPanel panel = PANEL_MAP.get(next);
 
         if (panel == null) {
             System.err.println("Subject not found: " + next);
         } else {
             frame.showPanel(panel);
-            frame.setSize(frame.getWidth(), panel.rows * 40);
+            if (panel instanceof FachPanel) {
+                FachPanel fp = (FachPanel) panel;
+                frame.setSize(frame.getWidth(), 20 + 40 * fp.getRows());
+            } else {
+                frame.setSize(frame.getWidth(), 400);
+            }
         }
     }
 

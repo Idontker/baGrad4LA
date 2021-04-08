@@ -2,13 +2,12 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import gui.panels.*;
 
 public class MainFrame extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    private GridPanel currentPanel;
+    private JPanel currentPanel;
 
     public MainFrame() {
         this(500, 500);
@@ -21,15 +20,7 @@ public class MainFrame extends JFrame {
         this.setBackground(Color.CYAN);
     }
 
-    public void place(int x, int y, JComponent c) {
-        currentPanel.place(x, y, c);
-    }
-
-    public void removeComponent(int x, int y, JComponent c) {
-        currentPanel.removeComponent(x, y, c);
-    }
-
-    public void showPanel(GridPanel next) {
+    public void showPanel(JPanel next) {
         if (currentPanel != null) {
             currentPanel.setVisible(false);
             this.remove(currentPanel);
