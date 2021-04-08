@@ -127,13 +127,11 @@ public class OverviewPanel extends GridPanel {
 
         for (int i = 0; i < fach.length; i++) {
             fachPanel[i] = new FachPanel(fach[i], fachnamen, mode_ba);
-            fachPanel[i].initButtons();
             ListenerGoToPage.PANEL_MAP.put(fach[i].fachname, fachPanel[i]);
         }
     }
 
-    @Override
-    public void initButtons() {
+    private void initButtons() {
         change_modul = new JButton[fach.length];
 
         for (int i = 0; i < change_modul.length; i++) {

@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 
 import gui.MainFrame;
 
-public abstract class GridPanel extends JPanel {
+public class GridPanel extends JPanel {
 
     protected static final long serialVersionUID = 1L;
     protected JPanel[][] panels;
@@ -36,9 +36,15 @@ public abstract class GridPanel extends JPanel {
         panels[y][x].remove(c);
     }
 
-    public abstract void initButtons();
-
     public void setFrame(MainFrame frame) {
         this.frame = frame;
+    }
+
+    public void setPanelBackground(Color color){
+        for (int i = 0; i < panels.length; i++) {
+            for (int j = 0; j < panels[i].length; j++) {
+                panels[i][j].setBackground(color);
+            }
+        }
     }
 }
