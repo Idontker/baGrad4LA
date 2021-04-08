@@ -1,4 +1,4 @@
 # baGrad4LA
 
-## Contributers: 
+## Contributors: 
 * Athanassios Karol Bakas
