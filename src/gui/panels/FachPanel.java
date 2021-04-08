@@ -165,7 +165,6 @@ class ModulView {
         if (baView) {
             if (modul.pflicht == false) {
                 using = new JCheckBox("Einbringen ?");
-                System.out.println(modul.name + " " + modul.using);
 
                 using.setSelected(modul.using);
 
