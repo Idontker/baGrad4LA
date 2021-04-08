@@ -24,3 +24,9 @@ hs_err_pid*
 
 # saver
 *saver*.txt
+
+# Ignoring directories
+# Both the directory itself and its contents will be ignored.
+out/
+.idea/
+*.iml
