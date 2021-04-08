@@ -28,6 +28,6 @@ public class Main {
         allFaecher.addAll(gym.values());
         Saver.setFaecher(allFaecher);
 
-        new GUI(map);
+        new GUI(map, loader);
     }
 }

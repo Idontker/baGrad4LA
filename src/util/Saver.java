@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Saver {
 
@@ -23,16 +24,15 @@ public class Saver {
         s.saveFaecher(def_facher);
     }
 
-    public static void construct() {
-        if (s == null) {
-            s = new Saver();
-        }
+    public static Saver getSaver() {
+        return s;
     }
 
-    public static void construct(String path) {
+    public static Saver construct(String path) {
         if (s == null) {
             s = new Saver(path);
         }
+        return s;
     }
 
     // =======================================
@@ -55,9 +55,24 @@ public class Saver {
         this.path = path;
     }
 
+    public void saveConfigs(String schulart, String faecher[]) {
+        try {
+            OutputStreamWriter out = getOutputStreamWriter("save_config.txt");
+            BufferedWriter writer = new BufferedWriter(out);
+
+            writer.append(schulart + "\n");
+            writer.append(Arrays.toString(faecher));
+            writer.flush();
+
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void saveFaecher(Fach[] faecher) {
         try {
-            OutputStreamWriter out = getOutputStreamWriter();
+            OutputStreamWriter out = getOutputStreamWriter(tmpSaveName);
             BufferedWriter writer = new BufferedWriter(out);
 
             for (Fach fach : faecher) {
@@ -88,15 +103,16 @@ public class Saver {
         }
     }
 
-    private OutputStreamWriter getOutputStreamWriter() throws FileNotFoundException, UnsupportedEncodingException {
-        File file = createSaveFile();
+    private OutputStreamWriter getOutputStreamWriter(String filename)
+            throws FileNotFoundException, UnsupportedEncodingException {
+        File file = createSaveFile(filename);
         FileOutputStream fileStream = new FileOutputStream(file.getAbsolutePath());
         OutputStreamWriter out = new OutputStreamWriter(fileStream, "UTF-8");
         return out;
     }
 
-    private File createSaveFile() {
-        return new File(path + "/" + tmpSaveName);
+    private File createSaveFile(String filename) {
+        return new File(path + "/" + filename);
     }
 
     private void endOfTransaction() {

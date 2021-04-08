@@ -23,7 +23,7 @@
 hs_err_pid*
 
 # saver
-*saver*.txt
+*save*.txt
 
 # Ignoring directories
 # Both the directory itself and its contents will be ignored.

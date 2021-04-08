@@ -247,10 +247,13 @@ public class OverviewPanel extends GridPanel {
         // ==============================
 
         double pred = 0.0;
-        pred += Math.abs(res[0][0]) > 0.0001 ? res[0][0] * 70 : total_note * 70;
-        pred += Math.abs(res[1][0]) > 0.0001 ? res[1][0] * 70 : total_note * 70;
-        pred += Math.abs(res[2][0]) > 0.0001 ? res[2][0] * 41 : total_note * 41;
-        pred /= 70 + 70 + 41;
+        double pred_ects = 0.0;
+        for (int i = 0; i < fach.length; i++) {
+            double ects = mode_ba ? fach[i].ects_ba : fach[i].ects_stex;
+            pred += Math.abs(res[i][0]) > 0.0001 ? res[i][0] * ects : total_note * ects;
+            pred_ects += ects;
+        }
+        pred /= pred_ects;
         this.updatePred(pred);
 
         // ==============================
@@ -273,7 +276,8 @@ public class OverviewPanel extends GridPanel {
         label_fachects[fachnummer].setText(formatECTS(val));
 
         if (label_warning[fachnummer] != null) {
-            if (val > 70.001) {
+            double threshold = mode_ba ? fach[fachnummer].ects_ba : fach[fachnummer].ects_stex;
+            if (val > threshold + 0.0001) {
                 label_warning[fachnummer].setVisible(true);
             } else {
                 label_warning[fachnummer].setVisible(false);

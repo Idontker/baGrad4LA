@@ -22,6 +22,42 @@ public class Loader {
         this.path = path;
     }
 
+    public String getLastSchulart() {
+        try {
+            Scanner sc = opeFileScanner(path + "/" + "save_config.txt");
+            if (sc.hasNextLine()) {
+                return sc.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Can not find save_config.txt");
+        }
+        return null;
+    }
+
+    public String[] getLastFaecher() {
+
+        try {
+            Scanner sc = opeFileScanner(path + "/" + "save_config.txt");
+            if (!sc.hasNextLine()) {
+                return null;
+            }
+            sc.nextLine();
+
+            if (!sc.hasNextLine()) {
+                return null;
+            }
+            String s = sc.nextLine();
+            s = s.replaceAll("\\[", "");
+            s = s.replaceAll("\\]", "");
+            s = s.replaceAll(" ", "");
+            return s.split(",");
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Can not find save_config.txt");
+        }
+        return null;
+    }
+
     public HashMap<String, Fach> loadFaecher(String schulart) {
         schulart = schulart.toLowerCase();
 

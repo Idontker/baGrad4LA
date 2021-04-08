@@ -36,7 +36,6 @@ public class Modul {
 
         if (isInteger(s[idx])) {
             this.using = Integer.parseInt(s[idx]) == 1;
-            System.out.println(name + "\t" + s[idx] + " " + using);
             idx++;
         }
         this.name = s[idx];

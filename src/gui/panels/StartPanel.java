@@ -20,6 +20,8 @@ import gui.HintTextField;
 import gui.MyComboBox;
 import gui.buttons.ListenerGoToPage;
 import util.Fach;
+import util.Loader;
+import util.Saver;
 
 public class StartPanel extends GridPanel {
 
@@ -30,18 +32,31 @@ public class StartPanel extends GridPanel {
     private JTextField textField_name;
     private JButton button_weiter;
 
+    private Loader loader;
+
     private HashMap<String, HashMap<String, Fach>> map;
 
     // public StartPanel(String[] schularten, HashMap<String,HashMap<String,Fach>
     // fachnNachSchulart);
-    public StartPanel(HashMap<String, HashMap<String, Fach>> map) {
+    public StartPanel(HashMap<String, HashMap<String, Fach>> map, Loader loader) {
         super(6, 2);
 
         this.map = map;
+        this.loader = loader;
 
         initLabels();
         initInputs();
         initButtons();
+
+        loadLastSettings();
+    }
+
+    private void loadLastSettings() {
+        String preferedSchulart = loader.getLastSchulart();
+        if (preferedSchulart != null) {
+            cb_schulart.setSelectedItem(preferedSchulart);
+            // updateCBFach();
+        }
     }
 
     private void initLabels() {
@@ -68,6 +83,7 @@ public class StartPanel extends GridPanel {
 
         cb_schulart = new MyComboBox(schularten, true);
         cb_schulart.setSelectedIndex(0);
+
         cb_schulart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -153,6 +169,12 @@ public class StartPanel extends GridPanel {
             if (faecherliste.size() > 1) {
                 cb_fach2.setSelectedIndex(1);
             }
+
+            String[] preferedFeacher = loader.getLastFaecher();
+            if (preferedFeacher != null && preferedFeacher.length == 2) {
+                cb_fach1.setSelectedItem(preferedFeacher[0]);
+                cb_fach2.setSelectedItem(preferedFeacher[1]);
+            }
         }
     }
 
@@ -171,6 +193,8 @@ public class StartPanel extends GridPanel {
 
         GridPanel overview = new OverviewPanel(fach);
         ListenerGoToPage.PANEL_MAP.put("Overview", overview);
+
+        Saver.getSaver().saveConfigs(schulart, new String[] { f1, f2 });
 
         frame.setVisible(false);
         frame.showPanel(overview);
