@@ -8,6 +8,8 @@ public class Modul {
     public double ects;
     public double gewicht;
     public boolean forBA;
+    public boolean pflicht;
+
     public ArrayList<String> restricted_fach = new ArrayList<String>();
     public ArrayList<String> necessary_fach = new ArrayList<String>();
 
@@ -15,6 +17,7 @@ public class Modul {
         // default value for gewicht:
         gewicht = 1.0;
         forBA = false;
+        pflicht = false;
 
         String s[] = loadedString.split(divider);
         for (int i = 0; i < s.length; i++) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,7 +17,9 @@ import gui.*;
 public class FachPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private JLabel fachLabel, label_note, label_ECTS;
+    private static final int cols = 5;
+
+    private JLabel fachLabel, label_note, label_ECTS, label_using;
     private MyButton back;
 
     // private HashMap<Modul, ModulView> map_modulView;
@@ -65,11 +69,12 @@ public class FachPanel extends JPanel {
     // ================ INIT =============
 
     private void initFirstRow() {
-        firstRow = new GridPanel(1, 4);
+        firstRow = new GridPanel(1, cols);
 
         fachLabel = new JLabel(fach.fachname);
         label_note = new JLabel("Note: 0.0");
         label_ECTS = new JLabel("ECTS: 0.0");
+        label_using = new JLabel("Einbringen?");
 
         back = new MyButton("Zurück");
         back.addActionListener(new ListenerGoToPage("Overview"));
@@ -77,7 +82,8 @@ public class FachPanel extends JPanel {
         firstRow.place(0, 0, fachLabel);
         firstRow.place(1, 0, label_note);
         firstRow.place(2, 0, label_ECTS);
-        firstRow.place(3, 0, back);
+        firstRow.place(3, 0, label_using);
+        firstRow.place(4, 0, back);
     }
 
     private void initModuls() {
@@ -94,8 +100,8 @@ public class FachPanel extends JPanel {
             }
         }
 
-        panel_all = new GridPanel(n_all, 4);
-        panel_ba = new GridPanel(n_ba, 4);
+        panel_all = new GridPanel(n_all, cols);
+        panel_ba = new GridPanel(n_ba, cols);
 
         // map_modulView = new HashMap<Modul, ModulView>();
 
@@ -142,15 +148,26 @@ public class FachPanel extends JPanel {
 
 class ModulView {
     JLabel label_modul;
+    JLabel label_ects;
     NotenBox nb_modul;
+    JComponent using;
 
     public ModulView(Modul modul) {
         label_modul = new JLabel(modul.name);
+        label_ects = new JLabel(modul.ects + " ECTS");
         nb_modul = new NotenBox(modul);
+        
+        if(modul.pflicht){
+            using = new JLabel("Pflicht");
+        } else {
+            using = new JCheckBox();
+        }
     }
 
     public void placeOn(GridPanel panel, int row) {
-        panel.place(1, row, this.label_modul);
-        panel.place(2, row, this.nb_modul);
+        panel.place(0, row, this.label_modul);
+        panel.place(1, row, this.nb_modul);
+        panel.place(2, row, label_ects);
+        panel.place(3, row, using);
     }
 }
