@@ -2,3 +2,4 @@
 
 ## Contributors: 
 * Athanassios Karol Bakas
+* Paul Meyer
