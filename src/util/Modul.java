@@ -10,6 +10,8 @@ public class Modul {
     public boolean forBA;
     public boolean pflicht;
 
+    public boolean using;
+
     public ArrayList<String> restricted_fach = new ArrayList<String>();
     public ArrayList<String> necessary_fach = new ArrayList<String>();
 
@@ -18,6 +20,7 @@ public class Modul {
         gewicht = 1.0;
         forBA = false;
         pflicht = false;
+        using = true;
 
         String s[] = loadedString.split(divider);
         for (int i = 0; i < s.length; i++) {
@@ -28,6 +31,12 @@ public class Modul {
 
         if (isDouble(s[idx])) {
             this.note = Double.parseDouble(s[idx]);
+            idx++;
+        }
+
+        if (isInteger(s[idx])) {
+            this.using = Integer.parseInt(s[idx]) == 1;
+            System.out.println(name + "\t" + s[idx] + " " + using);
             idx++;
         }
         this.name = s[idx];
@@ -47,23 +56,8 @@ public class Modul {
         idx++;
         if (idx >= s.length)
             return;
-        forBA = s[idx].trim().equalsIgnoreCase("BA");
-    }
-
-    public Modul(double ects, String name, double gewicht) {
-        this(0.0, ects, name);
-        this.gewicht = gewicht;
-    }
-
-    public Modul(double ects, String name) {
-        this(0.0, ects, name);
-    }
-
-    public Modul(double note, double ects, String name) {
-        this.note = note;
-        this.ects = ects;
-        this.name = name;
-        gewicht = 1.0;
+        forBA = s[idx].contains("BA");
+        pflicht = s[idx].contains("!");
     }
 
     private void initNebenfaecher(String modifier) {
@@ -109,6 +103,10 @@ public class Modul {
         return (!isBaMode || forBA);
     }
 
+    public boolean isUsed(boolean isBaMode) {
+        return (!isBaMode || using);
+    }
+
     @Override
     public String toString() {
         return note + " * " + gewicht + "\t" + ects + " ECTS" + "\t" + name;
@@ -117,6 +115,15 @@ public class Modul {
     private boolean isDouble(String s) {
         try {
             Double.parseDouble(s);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
             return false;

@@ -82,14 +82,15 @@ public class Saver {
                     writer.append(header + "\n");
                     first = false;
                 }
-                writer.append(m.note + "," + m.name + "\n");
+                int using = m.using ? 1 : 0;
+                writer.append(m.note + "," + using + "," + m.name + "\n");
             }
         }
     }
 
     private OutputStreamWriter getOutputStreamWriter() throws FileNotFoundException, UnsupportedEncodingException {
         File file = createSaveFile();
-        FileOutputStream fileStream = new FileOutputStream( file.getAbsolutePath());
+        FileOutputStream fileStream = new FileOutputStream(file.getAbsolutePath());
         OutputStreamWriter out = new OutputStreamWriter(fileStream, "UTF-8");
         return out;
     }

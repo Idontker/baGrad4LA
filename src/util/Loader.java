@@ -87,6 +87,7 @@ public class Loader {
             for (Modul other : saved.module) {
                 if (modul.name.equalsIgnoreCase(other.name)) {
                     modul.note = other.note;
+                    modul.using = other.using;
                 }
             }
         }

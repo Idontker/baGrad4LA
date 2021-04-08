@@ -13,6 +13,8 @@ public class NotenBox extends MyComboBox {
             "4.0" };
     private static final String[] bestehen = new String[] { "bestanden" };
 
+    private NotenBox link;
+
     public NotenBox(Modul modul) {
         super(chooseOptions(modul.gewicht), true);
 
@@ -26,6 +28,9 @@ public class NotenBox extends MyComboBox {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selected = (String) getSelectedItem();
+                if (link != null) {
+                    link.setSelectedItem(selected);
+                }
 
                 double newValue = 0.0;
                 if (Math.abs(modul.gewicht) < 0.001) {
@@ -45,6 +50,10 @@ public class NotenBox extends MyComboBox {
             }
 
         });
+    }
+
+    public void setLink(NotenBox other) {
+        link = other;
     }
 
     private static String[] chooseOptions(double gewicht) {

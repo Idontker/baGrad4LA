@@ -3,9 +3,9 @@ package gui.panels;
 import java.util.ArrayList;
 
 import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -19,7 +19,7 @@ public class FachPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final int cols = 4;
 
-    private JLabel fachLabel, label_note, label_ECTS, label_using;
+    private JLabel fachLabel, label_note, label_ECTS;
     private MyButton back;
 
     // private HashMap<Modul, ModulView> map_modulView;
@@ -74,7 +74,6 @@ public class FachPanel extends JPanel {
         fachLabel = new JLabel(fach.fachname);
         label_note = new JLabel("Note: 0.0");
         label_ECTS = new JLabel("ECTS: 0.0");
-        label_using = new JLabel("Einbringen?");
 
         back = new MyButton("Zurück");
         back.addActionListener(new ListenerGoToPage("Overview"));
@@ -84,7 +83,6 @@ public class FachPanel extends JPanel {
 
         JPanel cell = firstRow.panels[0][2];
         cell.setLayout(new BorderLayout());
-        cell.add(label_using, BorderLayout.EAST);
         cell.add(label_ECTS, BorderLayout.WEST);
 
         firstRow.place(3, 0, back);
@@ -117,15 +115,18 @@ public class FachPanel extends JPanel {
 
             if (modul.showIfNebenfachIs(nebenfaecher)) {
 
-                ModulView view = new ModulView(modul);
+                ModulView view = new ModulView(modul, false);
                 // map_modulView.put(modul, view);
                 view.placeOn(panel_all, idx_all);
                 idx_all++;
 
                 if (modul.showIfMode(mode_ba)) {
-                    view = new ModulView(modul);
-                    view.placeOn(panel_ba, idx_ba);
+                    ModulView view_ba = new ModulView(modul, true);
+                    view_ba.placeOn(panel_ba, idx_ba);
                     idx_ba++;
+
+                    view_ba.setLink(view);
+                    view.setLink(view_ba);
                 }
             }
         }
@@ -154,17 +155,30 @@ class ModulView {
     JLabel label_modul;
     JLabel label_ects;
     NotenBox nb_modul;
-    JComponent using;
+    JCheckBox using;
 
-    public ModulView(Modul modul) {
+    public ModulView(Modul modul, boolean baView) {
         label_modul = new JLabel(modul.name);
         label_ects = new JLabel(modul.ects + " ECTS");
         nb_modul = new NotenBox(modul);
 
-        if (modul.pflicht) {
-            using = new JLabel("Pflicht");
-        } else {
-            using = new JCheckBox("");
+        if (baView) {
+            if (modul.pflicht == false) {
+                using = new JCheckBox("Einbringen ?");
+                System.out.println(modul.name + " " + modul.using);
+
+                using.setSelected(modul.using);
+
+                using.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        modul.using = using.isSelected();
+
+                        OverviewPanel overview = (OverviewPanel) ListenerGoToPage.PANEL_MAP.get("Overview");
+                        overview.update();
+                    }
+                });
+            }
         }
     }
 
@@ -175,9 +189,15 @@ class ModulView {
         JPanel cell = panel.panels[row][2];
         cell.setLayout(new BorderLayout());
 
-        cell.add(using, BorderLayout.EAST);
         cell.add(label_ects, BorderLayout.WEST);
+        if (using != null) {
+            cell.add(using, BorderLayout.EAST);
+        }
 
         // panel.place(2, row, cell);
+    }
+
+    public void setLink(ModulView other) {
+        nb_modul.setLink(other.nb_modul);
     }
 }
