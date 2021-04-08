@@ -29,7 +29,7 @@ public class Loader {
                 return sc.nextLine();
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("Can not find save_config.txt");
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class Loader {
             return s.split(",");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println("Can not find save_config.txt");
         }
         return null;
     }
